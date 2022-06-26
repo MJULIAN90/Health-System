@@ -11,9 +11,9 @@ const Home = (props) => {
 
    const Render = () => {
       switch (roleUser.role) {
-         case 'Admin':
-            return <Admin {...props} />
          case 'Client':
+            return <Admin {...props} />
+         case 'Admin':
             return <User {...props} />
          case 'Laboratory':
             return <Laboratory {...props} />
