@@ -20,6 +20,7 @@ interface InterfaceRocket {
     //---------------------------------------Structs---------------------------------------
     //Servicios ofrecidos (precio y estado)
     struct Service {
+        string name;
         uint16 priceService;
         bool statusService;
     }
@@ -36,6 +37,7 @@ interface InterfaceRocket {
         uint16 requestType;
         bool statusRequest;
         address addressContract;
+        bool isRequest;
     }
 
     //---------------------------------------Funciones---------------------------------------

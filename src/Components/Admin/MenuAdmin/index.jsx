@@ -1,11 +1,9 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { BasicServices, SpecialServices, RechargeTockens, PendingRequest, UsersOrLaboratory } from '../index'
-import { Button } from '@mui/material';
+import { BasicServices, SpecialServices, RechargeTockens, PendingRequest, Laboratory, Client } from '../index'
 
 const MenuAdmin = (props) => {
     const { children, value, index, ...other } = props;
@@ -56,7 +54,7 @@ export default function VerticalTabs(hooks) {
                 <Tab label="Pending Request" {...a11yProps(0)} />
                 <Tab label="Basic Services" {...a11yProps(1)} />
                 <Tab label="Special Services" {...a11yProps(2)} />
-                <Tab label="Users" {...a11yProps(3)} />
+                <Tab label="Clients" {...a11yProps(3)} />
                 <Tab label="Laboratory" {...a11yProps(4)} />
                 <Tab label="Recharge Tockens" {...a11yProps(5)} />
             </Tabs>
@@ -71,10 +69,10 @@ export default function VerticalTabs(hooks) {
                 <SpecialServices {...hooks} />
             </MenuAdmin>
             <MenuAdmin value={value} index={3}>
-                <UsersOrLaboratory {...hooks}  name={'Client'} />
+                <Client {...hooks}  name={'Client'} />
             </MenuAdmin>
             <MenuAdmin value={value} index={4}>
-                < UsersOrLaboratory {...hooks} name={'Laboratory'} />
+                < Laboratory {...hooks} name={'Laboratory'} />
             </MenuAdmin>
             <MenuAdmin value={value} index={5}>
                 <RechargeTockens {...hooks}  />

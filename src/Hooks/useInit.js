@@ -11,6 +11,8 @@ const useInit = ()=>{
         role: undefined,
         status:false
     })
+    const [balanceEthers, setBalanceEthers] = useState(0);
+
 
     useEffect(() => {
         window.ethereum.on("accountsChanged", () => {
@@ -28,6 +30,10 @@ const useInit = ()=>{
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [instanceContract, account])
        
+    useEffect(() => {
+        getBalanceEth ()
+    }, [account])
+    
    
     const initContrat = async () => {
         const { instance: { methods }, accounts, web3 } = await initWeb3 ();
@@ -55,6 +61,17 @@ const useInit = ()=>{
         }
     }
 
+    const getBalanceEth = async () => {
+        try {
+            if (useWeb3 && account){
+                let balance = await useWeb3.eth.getBalance(account[0]);
+                setBalanceEthers(balance);
+            }
+        } catch (error) {
+            alert();
+        }
+    }
+
     const getNewUser = async () =>{
         let signer = await useWeb3.eth.getAccounts()
         const response = await instanceContract.requestSubscriptionClient().send({ from: signer[0] })
@@ -67,22 +84,15 @@ const useInit = ()=>{
         console.log('responses laboratyr', response);
     }
 
-    //Web3
-    const getBalanceEth = async () => {
-        let getBalanceTocken = await instanceContract.balanceContractUser(account[0]).call()
-        console.log('getBalanceTocken', getBalanceTocken);
-    }
-
-
     return{
         instanceContract,
         account,
         useWeb3,
         roleUser,
+        balanceEthers,
         getRole,
         getNewUser,
         getNewLaboratory,
-        getBalanceEth
     }
 }
 

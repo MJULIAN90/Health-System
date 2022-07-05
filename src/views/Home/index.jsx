@@ -25,7 +25,7 @@ const Home = (props) => {
    return (
       <Box sx={{ width: '100%' }}>
          <Stack spacing={2}>
-            <Nabvar />
+            <Nabvar {...props} />
             {Render()}
             <Footer />
          </Stack>

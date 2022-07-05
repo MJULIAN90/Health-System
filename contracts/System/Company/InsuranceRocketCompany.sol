@@ -46,19 +46,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
         _;        
     }
 
-    //---------------------------------------Funciones validadoras---------------------------------------
-
-    //Funcion para validar que el nombre de servicio ya no exista
-    function checkRepeatService(string [] memory services, string memory _name) private pure returns(bool identifier){
-        identifier = true;
-
-        for(uint i = 0; i < services.length; i++){
-            if(keccak256(abi.encodePacked(services[i])) == keccak256(abi.encodePacked(_name))){
-                identifier = false;
-            }
-        }
-    }
-
     //---------------------------------------Mappings---------------------------------------
     //Mapping para relacionar el nombre de un servicio con su estructura de datos
     mapping(string => Service) public Services;
@@ -85,6 +72,30 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
     //Array para almacenar las peticiones de suscripcion de clientes
     address[] requestMixed;
+
+    //---------------------------------------Funciones validadoras---------------------------------------
+
+    //Funcion para validar que el nombre de servicio ya no exista
+    function checkRepeatService(string [] memory services, string memory _name) private pure returns(bool identifier){
+        identifier = true;
+
+        for(uint i = 0; i < services.length; i++){
+            if(keccak256(abi.encodePacked(services[i])) == keccak256(abi.encodePacked(_name))){
+                identifier = false;
+            }
+        }
+    }
+
+    //Funcion para saber si una address ya tiene una peticion
+    function checkRepeatRequest() private view returns(bool identifier){
+        identifier = true;
+
+        for(uint i = 0; i < requestMixed.length; i++){
+            if(requestMixed[i] == msg.sender){
+                identifier = false;
+            }
+        }
+    }
 
     //---------------------------------------Funciones de tokens----------------------------------------------------
 
@@ -166,7 +177,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
         return (_name, SpecialServices[_name].priceService, SpecialServices[_name].statusService);
     }
 
-    //? para que lo uso
     //Funcion para revisar el numero de contrato de cada cliente
     function checkNumberContract() public view returns(address){
         return RequestStatus[msg.sender].addressContract;
@@ -216,8 +226,9 @@ contract InsuranceRocketCompany is InterfaceRocket{
     //Funcion para habilitar un cliente o laboratorio
     function enableSubscription(address _addr) public override onlyOwner{
         RequestStatus[_addr].statusRequest = true;
+        RequestStatus[_addr].isRequest = true;
 
-        emit enableSubscriptionEvent("Se ha habilitado un cliente o suscripcion");
+        emit enableSubscriptionEvent("Se ha habilitado una suscripcion");
     }
 
     //Funcion para cambiar el estado de los servicios
@@ -231,22 +242,26 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function createService(string memory _name, uint16 _price) public override onlyOwner{
         require(checkRepeatService(listServices, _name), "Nombre de servicios ya existe.");
 
-        Services[_name] = Service(_price, true);
+        Services[_name] = Service(_name, _price, true);
+
         listServices.push(_name);
 
         emit createServiceEvent("Se ha creado un nuevo servicio.");
     }
 
-    // ? el admin no se si la use
-    //Funcion para saber si una cuenta tiene ya una peticion
-    function checkRepeatRequest() private view returns(bool identifier){
-        identifier = true;
+    //Funcion para mostrar los servicios basicos disponibles
+    function showListServices() public view returns(string [] memory ){
+        return listServices;
+    }
 
-        for(uint i = 0; i < requestMixed.length; i++){
-            if(requestMixed[i] == msg.sender){
-                identifier = false;
-            }
-        }
+    //Funcion para mostrar los servicios basicos disponibles
+    function showListUsers() public view returns(address [] memory ){
+        return requestMixed;
+    }
+
+    //Funcion para ver detalles de cada usuario sean clientes o laboratorios
+    function showDetailsUser (address _addr) public view returns (uint16, bool, address){
+        return (RequestStatus[_addr].requestType, RequestStatus[_addr].statusRequest, RequestStatus[_addr].addressContract);
     }
 
     //---------------------------------------Contrato clientes---------------------------------------
@@ -254,7 +269,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
     //Funcion para solicitar una suscripcion para un cliente
     function requestSubscriptionClient() public override {
         require(checkRepeatRequest(), "Ya tienes una peticion a tu direccion.");
-        RequestStatus[msg.sender] = Request(uint16(RequestType.CLIENT), false, address(0));
+        RequestStatus[msg.sender] = Request(uint16(RequestType.CLIENT), false, address(0), false);
         requestMixed.push(msg.sender);
     }
 
@@ -321,7 +336,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function requestSubscriptionLaboratory() public override {
         require(checkRepeatRequest(), "Ya tienes una peticion a tu direccion.");
         
-        RequestStatus[msg.sender] = Request(uint16(RequestType.LABORATORY), false, address(0));
+        RequestStatus[msg.sender] = Request(uint16(RequestType.LABORATORY), false, address(0), false);
         requestMixed.push(msg.sender);
     }
 
@@ -353,7 +368,12 @@ contract InsuranceRocketCompany is InterfaceRocket{
         SpecialServices[_name].statusService = !SpecialServices[_name].statusService;
 
         emit changeStatusServiceEvent("Se ha cambiado el estado del servicio especial correctamente.");
-    } 
+    }
+
+    //Funcion para mostrar lista de servicios especiales
+    function showListServiceSpecial () public view returns (string [] memory){
+        return listSpecialServices;
+    }
 
     //Funcion cancelar contrato de laborario
     function cancelContractLaboratory(address _laboratory) external payable onlyLaboratories(_laboratory) returns(string memory){
