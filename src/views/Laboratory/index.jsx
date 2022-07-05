@@ -11,7 +11,7 @@ const Laboratory = (props) => {
       <Grid container marginBottom={5}>
         <Grid item xs={8}>
           <Typography variant="h3" margin={3}>
-            User name
+            User laboratory
           </Typography>
         </Grid>
         <Grid item xs={4} style={{ textAlign: "end" }}>

@@ -11,11 +11,11 @@ const Home = (props) => {
 
    const Render = () => {
       switch (roleUser.role) {
-         case 'Client':
-            return <Admin {...props} />
-         case 'Laboratory':
-            return <User {...props} />
          case 'Admin':
+            return <Admin {...props} />
+         case 'Client':
+            return <User {...props} />
+         case 'Laboratory':
             return <Laboratory {...props} />
          default:
             break;
