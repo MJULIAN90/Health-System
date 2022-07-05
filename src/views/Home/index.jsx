@@ -13,9 +13,9 @@ const Home = (props) => {
       switch (roleUser.role) {
          case 'Client':
             return <Admin {...props} />
-         case 'Admin':
-            return <User {...props} />
          case 'Laboratory':
+            return <User {...props} />
+         case 'Admin':
             return <Laboratory {...props} />
          default:
             break;
@@ -33,4 +33,4 @@ const Home = (props) => {
    )
 }
 
-export default Home
+export default Home;

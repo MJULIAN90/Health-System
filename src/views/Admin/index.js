@@ -8,7 +8,7 @@ const Admin = (props) => {
 
   return (
     <Box style={{width:"100%"}}>
-      <Grid container xs={12} marginBottom={5}>
+      <Grid container marginBottom={5}>
         <Grid item xs={8}>
           <Typography variant='h3' margin={3} > User name</Typography>
         </Grid>
