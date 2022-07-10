@@ -1,11 +1,10 @@
 import { List, Box } from '@mui/material'
-import React, { memo } from 'react'
+import React from 'react'
 
-const InfoClient = memo(({ name, list }) => {
+const InfoClient =({ name, list }) => {
 
    return (
         <div>
-
             <Box>
                 {list.length === 0 ? `we do not have ${name}` :
                     <List>
@@ -26,6 +25,6 @@ const InfoClient = memo(({ name, list }) => {
             </Box>
         </div>
     )
-})
+}
 
 export default InfoClient

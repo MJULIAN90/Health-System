@@ -25,7 +25,7 @@ const BasicServices = ({ getBasicServices, listBasicServices, onChangeStatusServ
             {
               listBasicServices.map(service => {
                 return (
-                  <Service onPressChangeStatus={onPressChangeStatus} service={service} typeService />
+                  <Service service={service} typeService/>
                 )
               })
             }

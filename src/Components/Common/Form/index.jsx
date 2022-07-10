@@ -2,27 +2,31 @@ import React, { useState } from "react";
 import {
     Container,
     FormControl,
-    FormHelperText,
     InputLabel,
     Input,
     Button,
     Grid,
 } from "@mui/material";
+import useAlerts from "../../../Hooks/useAlerts";
 
-const Form = ({ textButton, method, isName = false, modalClose = () =>{} }) => {
+const Form = ({ textButton, method, isName = false, modalClose = () =>{}, isDisable = false}) => {
     const [quantity, setQuantity] = useState(0);
     const [name, setName] = useState('');
+    const { alertMessage } = useAlerts()
 
     const onSumit = () => {
-        method(quantity, name)
-        modalClose()
+        if (isDisable ) {
+            alertMessage ('You need active your contract')
+        }else{
+            method(quantity, name)
+            modalClose()
+        }
     }
+
     return (
         <Container>
-
             <FormControl>
                 <Grid container >
-
                     {isName &&
                         <Grid item>
                             <InputLabel htmlFor="my-input"> Name service</InputLabel>
@@ -34,7 +38,6 @@ const Form = ({ textButton, method, isName = false, modalClose = () =>{} }) => {
                             />
                         </Grid>
                     }
-
                     <Grid item>
                         <InputLabel htmlFor="my-quaitity" >Quantity</InputLabel>
                         <Input
@@ -44,16 +47,12 @@ const Form = ({ textButton, method, isName = false, modalClose = () =>{} }) => {
                             aria-describedby="my-helper-text"
                         />
                     </Grid>
-
                 </Grid>
             </FormControl>
-
             <Grid item md={12}>
-
-                <Button variant="contained" onClick={onSumit}>
+                <Button variant="contained" onClick={onSumit} >
                     {textButton}
                 </Button>
-
             </Grid>
         </Container>
     );

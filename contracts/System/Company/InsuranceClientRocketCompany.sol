@@ -16,7 +16,17 @@ contract Client{
         IPrincipalContract =InsuranceRocketCompany(payable(addressPrincipalContract));
         statusContract = true;
     }
-    
+
+    //-----------------------------------------events--------------------------------------------------
+    //Evento para cancelar un contrato
+    event cancelContractEvent(string);
+
+    //Evento para cuando se utiliza un servicio
+    event useServiceEvent(string);
+
+    //Evento para cuando se compran tokens
+    event buyTokensEvent(string);
+
     //Funcion cancelar contrato
     function changeStatus() external {
         statusContract = false;
@@ -25,39 +35,49 @@ contract Client{
     //---------------------------------------Funciones contrato clientes---------------------------------------
     //Funcion para comprar tokens
     function buyTokens(uint16 _quantity) public payable {
-        require(statusContract , "No posee un contracto activo");
+        require(statusContract , "No active contract");
         IPrincipalContract.buyTokens{value: msg.value}(_quantity, owner);
-
+        emit buyTokensEvent("purchased tokens");   
     }
 
     //Funcion para devolver ether cuando un Cliente se da de baja
     function balanceUser() public  view returns(uint){
-        require(statusContract , "No posee un contracto activo");
+        require(statusContract , "No active contract");
         return  IPrincipalContract.balanceContractUser(addressContract);
     }
 
     //Funcion para ver servicios disponibles
     function listServices() public view returns(string[] memory){
-        require(statusContract , "No posee un contracto activo");
+        require(statusContract , "No active contract");
         return IPrincipalContract.showActivedServices();
     }
 
     //Funcion ver detalles de un servicio
     function detailsService(string memory _name) public  view returns(string memory , uint16 , bool){
-       require(statusContract , "No posee un contracto activo");
+       require(statusContract , "No active contract");
        return IPrincipalContract.showServiceDetails(_name);
     }
 
     //Funcion para cancelar mi contrato
-    function cancelContract() public payable returns(string memory){
-       require(statusContract , "No posee un contracto activo a cancelar");
-       return(IPrincipalContract.cancelContractClient(owner));
+    function cancelContract() public payable {
+       require(statusContract , "No active contract a cancelar");
+       IPrincipalContract.cancelContractClient(owner);
+       emit cancelContractEvent("contract cancelled");
     }
 
     //Funcion usar un servicio
-    function useService(string memory _nameService) public {
-        IPrincipalContract.asignServiceClient(_nameService, owner);
-    }
+    // function useService(string memory _nameService) public {
+    //     // IPrincipalContract.asignServiceClient(_nameService, owner);
+    //     IPrincipalContract.asignServiceClient(_nameService, addressContract);
+    //     // emit useServiceEvent("assigned service");
+    // }
+
+    //Funcion usar un servicio
+    // function useService(string memory _nameService) public {
+    //     // IPrincipalContract.asignServiceClient(_nameService, owner);
+    //     IPrincipalContract.asignServiceClient(_nameService);
+    //     // emit useServiceEvent("assigned service");
+    // }
 
     //Funcion usar un servicio
     function useSpecialService(string memory _nameService) public {
@@ -71,13 +91,13 @@ contract Client{
 
     //Funcion para ver servicios especiales disponibles
     function listSpecialServices() public view returns(string[] memory){
-        require(statusContract , "No posee un contracto activo");
+        require(statusContract , "No active contract");
         return IPrincipalContract.showActivedSpecialServices();
     }
 
     //Funcion ver detalles de un servicios especiales
     function detailsSpecialService(string memory _name) public  view returns(string memory , uint16 , bool){
-       require(statusContract , "No posee un contracto activo");
+       require(statusContract , "No active contract");
        return IPrincipalContract.showSpecialServiceDetails(_name);
     }
 }

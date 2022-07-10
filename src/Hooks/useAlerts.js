@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
 const useAlerts = () => {
-  const alert = (message, type) => {
+  const alertMessage = (message = 'Error', type = 'error') => {
     Swal.fire({
       title: type.toUpperCase(), 
       text: message, 
@@ -11,7 +11,7 @@ const useAlerts = () => {
   };
 
   return {
-    alert,
+    alertMessage,
   };
 };
 

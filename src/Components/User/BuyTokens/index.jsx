@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, TextField, Container } from "@mui/material";
-import {Form} from "../../Commons";
+import {Form} from "../../Common";
 
-const BuyTokens = ({ buyTokens }) => {
+const BuyTokens = ({ buyTokens, statusContractClient }) => {
   return (
-    <Form method={buyTokens} textButton="Buy Tokens"/>
+    <Form method={buyTokens} textButton="Buy Tokens" isDisable={statusContractClient}/>
   );
 };
 

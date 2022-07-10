@@ -30,7 +30,7 @@ function a11yProps(index) {
   };
 }
 
-const Services = ( {listBasicService, listSpecialService, getListBasicServices, getListSpecialServices} ) => {
+const Services = ({ listBasicService, listSpecialService, getListBasicServices, getListSpecialServices, getUseBasicService, getUseSpecialService } ) => {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -49,16 +49,16 @@ const Services = ( {listBasicService, listSpecialService, getListBasicServices, 
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="basicService" {...a11yProps(0)} />
-          <Tab label="specialService" {...a11yProps(1)} />
+          <Tab label="Basic Services" {...a11yProps(0)} />
+          <Tab label="Special Services" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <Box >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <ListService list={listBasicService} method={getListBasicServices}/>
+          <ListService list={listBasicService} method={getListBasicServices} onBuyService={ getUseBasicService } />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <ListService list={listSpecialService} method={getListSpecialServices} />
+          <ListService list={listSpecialService} method={getListSpecialServices} onBuyService={ getUseSpecialService } />
         </TabPanel>
       </Box>
     </Box>

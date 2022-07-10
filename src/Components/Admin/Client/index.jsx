@@ -1,13 +1,12 @@
-import React, {  useMemo } from 'react'
+import React, {  useEffect } from 'react'
 import { InfoClient } from '../../Common'
 
 const Client = ({ listClients, getClients }) => {
 
-   useMemo(
-     async () => {
-       await getClients()
-    },[listClients],)
-  
+    useEffect(() => {
+      getClients()
+    }, [])
+
   return (
     <InfoClient name={'Client'} list={listClients} /> 
   )

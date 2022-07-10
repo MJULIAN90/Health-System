@@ -15,11 +15,16 @@ interface InterfaceRocket {
     //Evento para notificar cuando se crea un contrato apra cliente
     event createFactoryEvent(string, address);
     //Evento servicio asginado a un usuario
-    event asignServiceClientEvent (string , address);
+    // event asignServiceClientEvent (string , address);
+    event asignServiceClientEvent (string );
+
+    //Evento Petcion de cliente o laboratorio exitosa
+    event createFactoryEvent (string);
     
     //---------------------------------------Structs---------------------------------------
     //Servicios ofrecidos (precio y estado)
     struct Service {
+        string name;
         uint16 priceService;
         bool statusService;
     }
@@ -36,6 +41,7 @@ interface InterfaceRocket {
         uint16 requestType;
         bool statusRequest;
         address addressContract;
+        bool isRequest;
     }
 
     //---------------------------------------Funciones---------------------------------------

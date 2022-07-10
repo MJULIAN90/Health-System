@@ -1,17 +1,15 @@
-import React, { useMemo } from 'react'
-import { memo } from 'react';
+import React, { useEffect } from 'react'
 import { InfoClient } from '../../Common'
 
-const Laboratory = memo(({ listLaboratories, getLaboratories }) => {
+const Laboratory = ({ listLaboratories, getLaboratories }) => {
 
-    useMemo(
-        async () => {
-            await getLaboratories()
-    },[listLaboratories],)
-
+    useEffect(() => {
+        getLaboratories()
+    }, [])
+    
     return (
         <InfoClient name={'Laboratory'} list={listLaboratories} />
     )
-})
+}
 
 export default Laboratory
