@@ -33,7 +33,7 @@ contract Laboratory{
     event withdrawBalanceLaboratoryEvent(string);
 
     //Funcion cancelar contrato
-    function changeStatus() external {
+    function changeStatus() private {
         statusContract = false;
         // emit changeStatusEvent("Contract has been cancelled");
     }
@@ -55,7 +55,9 @@ contract Laboratory{
     //Funcion cancelar contrato de laborario
     function cancelContractLaboratory() public{
         require(statusContract, "No active contract");
-        IPrincipalContract.cancelContractLaboratory(owner);
+        // IPrincipalContract.cancelContractLaboratory(owner);
+        IPrincipalContract.changeStatusContract(owner);
+        // changeStatus();
         emit cancelContractLaboratoryEvent("Laboratory contract cancelled");
     }
 

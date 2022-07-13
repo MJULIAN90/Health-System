@@ -10,8 +10,6 @@ const BasicServices = ({ getBasicServices, listBasicServices, onChangeStatusServ
     getBasicServices()
   }, [])
 
-
-  // para cuando le de click y quiera cambiar status
   const onPressChangeStatus = (name) => {
     onChangeStatusService(name)
   }
@@ -25,7 +23,7 @@ const BasicServices = ({ getBasicServices, listBasicServices, onChangeStatusServ
             {
               listBasicServices.map(service => {
                 return (
-                  <Service service={service} typeService/>
+                  <Service service={service} typeService onPressChangeStatus={onPressChangeStatus} />
                 )
               })
             }

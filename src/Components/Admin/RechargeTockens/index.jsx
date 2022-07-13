@@ -1,4 +1,4 @@
-import { Button, Container, TextField } from '@mui/material'
+import { Button, Container, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { Form } from  '../../Common'
 
@@ -11,8 +11,7 @@ const RechargeTockens = ({ getRechargeTokens }) => {
     <Container 
     style={{display: "flex", flexDirection: "column" , width:"100%"}}>
 
-      {/* <TextField id="quantity" label="Quantity" variant="outlined" />
-      <Button onClick={onRechargeTockens} >Buy Tokens</Button> */}
+      <Typography >Here we can add more tockens for our contract</Typography>
 
       <Form method={onRechargeTockens} textButton={'Recharge tockens'} />
       

@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useEffect, useState } from "react"
 import { clearDataWallets } from "../utils"
 import useAlerts from "./useAlerts"
 
 const useAdmin = (props) => {
     const { alertMessage } = useAlerts()
-    const { instanceContract, account, useWeb3 } = props
+    const { instanceContract, account } = props
     const [balanceContract, setbalanceContract] = useState(0);
     const [listBasicServices, setListBasicServices] = useState([]);
     const [listSpecialServices, setListSpecialServices] = useState([]);
@@ -28,10 +28,10 @@ const useAdmin = (props) => {
 
     const getRechargeTokens = async (amount) => {
         try {
-            let response = await instanceContract.rechargeTokens(parseInt(amount)).send({ from: account[0] });
-            const messageResponse = response.events.rechargeTokensEvent.returnValues[0];
+             await instanceContract.rechargeTokens(parseInt(amount)).send({ from: account[0] });
+            // const messageResponse = response.events.rechargeTokensEvent.returnValues[0];
             getBalanceContract ()
-            alertMessage(`Tockens recharge ${messageResponse}`, 'success');
+            alertMessage(`Tockens recharge ${amount}`, 'success');
         } catch (error) {
             alertMessage();
         }
@@ -49,12 +49,12 @@ const useAdmin = (props) => {
 
     const onChangeStatusService = async (name) => {
         try {
-            const response = await instanceContract.changeStatusService(name).send({ from: account[0] });
-            const messageResponse = response.events.changeStatusServiceEvent.returnValues[0];
+            /* const response = */ await instanceContract.changeStatusService(name).send({ from: account[0] });
+            // const messageResponse = response.events.changeStatusServiceEvent.returnValues[0];
 
-            alertMessage(messageResponse, 'success');
+            alertMessage('The service status has been successfully changed', 'success');
             getBasicServices();
-            return response;
+            // return response;
         } catch (error) {
             alertMessage();
         }
@@ -62,13 +62,12 @@ const useAdmin = (props) => {
 
     const getCreateService = async (price, name) => {
         try {
-            const response = await instanceContract.createService(name, price).send({ from: account[0] });
-            const messageResponse = response.events.createServiceEvent.returnValues[0];
-            
-            alertMessage(messageResponse, 'success');
+            /* const response =  */await instanceContract.createService(name, price).send({ from: account[0] });
+            // const messageResponse = response.events.messageEvent.returnValues[0];
+            alertMessage('A new service has been created', 'success');
             getBasicServices()
         } catch (error) {
-            alertMessage();
+            alertMessage('Error creating a service');
         }
     }
 
@@ -78,9 +77,10 @@ const useAdmin = (props) => {
             const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContract.showSpecialServiceDetails(name).call()));
             setListSpecialServices(responseSpecialDetails);
         } catch (error) {
-            alertMessage();
+            alertMessage('Error loading services');
         }
     }
+
     const getPendintRequest = async (name) => {
         try {
             const response = await instanceContract.showPendingRequest(name).call({ from: account[0] });
@@ -102,14 +102,14 @@ const useAdmin = (props) => {
 
     const getEnableSubscription = async (add) => {
         try {
-            const response = await instanceContract.enableSubscription(add).send({ from: account[0] });
-            const messageResponse = response.events.enableSubscriptionEvent.returnValues[0];
-            alertMessage(messageResponse, 'success');
+            /* const response = */await  instanceContract.enableSubscription(add).send({ from: account[0] });
+            // const messageResponse = response.events.messageEvent.returnValues[0];
+            // alertMessage(messageResponse, 'success');
+            alertMessage('A subscription has been enabled', 'success');
             getPendintRequest('Client');
             getPendintRequest('Laboratory');
-
         } catch (error) {
-            alertMessage();
+            alertMessage("A subscription has't been enabled");
         }
     }
 
@@ -123,7 +123,8 @@ const useAdmin = (props) => {
                     return array.push({
                         wallet: client,
                         status: response[1],
-                        addresContract: response[2]
+                        addresContract: response[2],
+                        statusContract: response[3]
                     })
                 }
             }))
@@ -153,22 +154,30 @@ const useAdmin = (props) => {
         }
     }
 
-    // ver si fuciona
-    const onCancelContractCliente = (add) => { }
+    const onBanUser = async (add) => {
+        try {
+            await instanceContract.bannedUser(add).send({ from: account[0] });
+            alertMessage('Contract user has been banned', 'success');
+            getClients()
+        } catch (error) {
+            alertMessage("Error in transaction");
+        }
+     }
 
-    // ver si fuciona
-    const onCancelContractLaboratory = (add) => { }
-
-    // ! pendiente por hacer o si funciona
-    const cancelContract = () => {
-        // ? aun no tenemos que el admin cancele contratos
-        // ? revisar como se queman los contratos
-        // const response = instanceContract.
-    }
+    const onUnBanUser = async (add) => {
+        try {
+            await instanceContract.unBannedUser(add).send({ from: account[0] });
+            alertMessage('Contract user has been actived', 'success');
+            getClients()
+        } catch (error) {
+            alertMessage("Error in transaction");
+        }
+     }
 
     return {
+        onBanUser,
+        onUnBanUser,
         getPendintRequest,
-        cancelContract,
         getClients,
         getLaboratories,
         getSpecialServices,
@@ -185,7 +194,6 @@ const useAdmin = (props) => {
         listClients,
         listLaboratories,
     }
-
 }
 
 export default useAdmin;

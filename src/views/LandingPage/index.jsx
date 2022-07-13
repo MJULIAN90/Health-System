@@ -1,27 +1,25 @@
 import React from 'react'
 import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
 
-const LandingPage = ({ roleUser, getNewLaboratory, getNewUser }) => {
-    
+const LandingPage = ({ roleUser, getNewLaboratory, getNewUser, getRole, onSumit }) => {
     const navigate = useNavigate();
     
-    const onSumit = () =>{
-        if (roleUser.role ){
-            if (roleUser.status){
-               return navigate("/home")
-            }
-            return alert ('debes activar tu cuenta')
-        } 
-        return alert ('debes incribirte')
+    useEffect(() => {
+        getRole()
+    }, [])
+    
+    const hamdleSumit = () => {
+        onSumit(navigate)
     }
 
     const onLaboratory = async ()=>{
-        await getNewLaboratory ()
-    }
+        getNewLaboratory()
+    }   
 
     const onNewUser = async () => {
-        await getNewUser ()
+        getNewUser()
     }
 
     return (
@@ -36,7 +34,7 @@ const LandingPage = ({ roleUser, getNewLaboratory, getNewUser }) => {
                         <Typography height={"70%"}>
                             carreta para laboratorio
                         </Typography>
-                        <Button onClick={onLaboratory}>
+                        <Button onClick={onLaboratory} >
                             Unirse
                         </Button>
                     </Box>
@@ -47,7 +45,7 @@ const LandingPage = ({ roleUser, getNewLaboratory, getNewUser }) => {
                         <Typography height={"70%"}>
                             Aca va la info d ela empresa y del pryecto
                         </Typography>
-                        <Button height={"30%"} onClick={onSumit}>
+                        <Button height={"30%"} onClick={hamdleSumit}>
                             Ingresar
                         </Button>
                     </Box>
@@ -58,7 +56,7 @@ const LandingPage = ({ roleUser, getNewLaboratory, getNewUser }) => {
                         <Typography height={"70%"}>
                             carreta para user
                         </Typography>
-                        <Button onClick={onNewUser}>
+                        <Button onClick={onNewUser} >
                             Aquirir Poliza
                         </Button>
                     </Box>

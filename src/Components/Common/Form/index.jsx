@@ -6,6 +6,7 @@ import {
     Input,
     Button,
     Grid,
+    Typography,
 } from "@mui/material";
 import useAlerts from "../../../Hooks/useAlerts";
 
@@ -14,11 +15,12 @@ const Form = ({ textButton, method, isName = false, modalClose = () =>{}, isDisa
     const [name, setName] = useState('');
     const { alertMessage } = useAlerts()
 
-    const onSumit = () => {
+    const onSumit = async () => {
         if (isDisable ) {
             alertMessage ('You need active your contract')
         }else{
-            method(quantity, name)
+            await method(quantity, name)
+            setQuantity(0)
             modalClose()
         }
     }
@@ -42,6 +44,7 @@ const Form = ({ textButton, method, isName = false, modalClose = () =>{}, isDisa
                         <InputLabel htmlFor="my-quaitity" >Quantity</InputLabel>
                         <Input
                             onChange={(e) => setQuantity(e.target.value)}
+                            placeholder = {'0'}
                             value={quantity}
                             id="my-quaitity"
                             aria-describedby="my-helper-text"
@@ -50,7 +53,7 @@ const Form = ({ textButton, method, isName = false, modalClose = () =>{}, isDisa
                 </Grid>
             </FormControl>
             <Grid item md={12}>
-                <Button variant="contained" onClick={onSumit} >
+                <Button variant="contained" onClick={onSumit} disabled={quantity == 0}>
                     {textButton}
                 </Button>
             </Grid>

@@ -39,6 +39,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
     }
 
     modifier onlyClient(address _userWallet){
+
         require (
             RequestStatus[_userWallet].requestType == uint16(0) && RequestStatus[_userWallet].statusRequest == true,
             "No client permissions"
@@ -103,7 +104,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function rechargeTokens(uint16 _amount) public override onlyOwner {
         token.mint(_amount);
 
-        emit rechargeTokensEvent(_amount);
+        // emit rechargeTokensEvent(_amount);
     }
 
     //Funcion ver tokens de contrato principal
@@ -189,11 +190,29 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
 
     //Funcion para saber el role y el status de cada usuario o laboratorio
-    function showStatusAndRole() public view returns(uint16, bool, bool){
+    function showStatusAndRole() public view returns(uint16, bool, bool, string memory){
         //Agragar require que pregunte si existe o no y validar
-        return (RequestStatus[msg.sender].requestType, RequestStatus[msg.sender].statusRequest, RequestStatus[msg.sender].isRequest);
+        return (RequestStatus[msg.sender].requestType, RequestStatus[msg.sender].statusRequest, RequestStatus[msg.sender].isRequest, RequestStatus[msg.sender].statusContract );
     }
 
+    //change status contract clients or laboratory
+    function changeStatusContract(address _userWallet) external payable {
+
+        require(RequestStatus[_userWallet].addressContract == msg.sender, "You do not have permissions to run this operation");
+
+        RequestStatus[_userWallet].statusContract = 'inactive';
+
+        if (token.balanceOf(msg.sender) > 0 ) {
+            uint balanceUserTokens = token.balanceOf(msg.sender);
+            token.transferTokenRocket(msg.sender,addressContract, balanceUserTokens );
+            payable (_userWallet).transfer(tokenToGwei(balanceUserTokens));
+
+            //  emit messageEvent ("Your contract has been cancelled and your money returned to your wallet.");
+        }
+        // else{
+        //      emit messageEvent ("Your contract has been cancelled");
+        // }
+    }
 
     //---------------------------------------Funciones para el admin ---------------------------------------
 
@@ -226,15 +245,15 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function enableSubscription(address _addr) public override onlyOwner{
         RequestStatus[_addr].statusRequest = true;
         RequestStatus[_addr].isRequest = true;
-
-        emit enableSubscriptionEvent("A subscription has been enabled");
+        RequestStatus[_addr].statusContract = 'acepted';
+        // emit messageEvent("A subscription has been enabled");
     }
 
     //Funcion para cambiar el estado de los servicios
     function changeStatusService(string memory _name) public override onlyOwner{
         Services[_name].statusService = !Services[_name].statusService;
 
-        emit changeStatusServiceEvent("The service status has been successfully changed.");
+        // emit messageEvent("The service status has been successfully changed.");
     }
 
     //Funcion para crear servicios
@@ -245,7 +264,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
         listServices.push(_name);
 
-        emit createServiceEvent("A new service has been created.");
+        // emit messageEvent("A new service has been created.");
     }
 
     //Funcion para mostrar los servicios basicos disponibles
@@ -259,8 +278,24 @@ contract InsuranceRocketCompany is InterfaceRocket{
     }
 
     //Funcion para ver detalles de cada usuario sean clientes o laboratorios
-    function showDetailsUser (address _addr) public view returns (uint16, bool, address){
-        return (RequestStatus[_addr].requestType, RequestStatus[_addr].statusRequest, RequestStatus[_addr].addressContract);
+    function showDetailsUser (address _addr) public view returns (uint16, bool, address, string memory ){
+        return (RequestStatus[_addr].requestType, RequestStatus[_addr].statusRequest, RequestStatus[_addr].addressContract, RequestStatus[_addr].statusContract);
+    }
+
+    //Funcion para banear un cliente o laboratorio
+    function bannedUser(address _addr) public onlyOwner{
+        RequestStatus[_addr].statusContract = 'banned';
+
+        // emit messageEvent("User banned");
+    }
+
+    //Funcion para desbanear un cliente o laboratorio
+    function unBannedUser(address _addr ) public onlyOwner{
+        RequestStatus[_addr].statusContract = 'active';
+
+        // Client ClientContract = Client(msg.sender);
+        // ClientContract.changeStatus ();
+        // emit messageEvent("User unbanned");
     }
 
     //---------------------------------------Contrato clientes---------------------------------------
@@ -268,10 +303,12 @@ contract InsuranceRocketCompany is InterfaceRocket{
     //Funcion para solicitar una suscripcion para un cliente
     function requestSubscriptionClient() public override {
         require(checkRepeatRequest(), "You already have a request to your address.");
-        RequestStatus[msg.sender] = Request(uint16(RequestType.CLIENT), false, address(0), false);
+        // require(keccak256(abi.encodePacked(RequestStatus[msg.sender].statusContract)) != keccak256(abi.encodePacked('inactive')), "Your contract is disable.");
+        // require(keccak256(abi.encodePacked(RequestStatus[msg.sender].statusContract)) != keccak256(abi.encodePacked('banned')), "Your account is banned.");
+        RequestStatus[msg.sender] = Request(uint16(RequestType.CLIENT), false, address(0), false, 'initial');
         requestMixed.push(msg.sender);
 
-        emit createFactoryEvent('Successful request');
+        // emit messageEvent('Successful request');
     }
 
     //Funcion para creacion de contrato de Cliente
@@ -280,50 +317,20 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
         address clientAddressContract = address(new Client(msg.sender, addressContract));
         RequestStatus[msg.sender].addressContract = clientAddressContract;
-
+        RequestStatus[msg.sender].statusContract = 'active';
         emit createFactoryEvent("Contract created", clientAddressContract);
     }
 
-    //Funcion cancelar contrato de un Client
-    function cancelContractClient(address _userWallet) external payable onlyClient(_userWallet) returns(string memory){
-        require(RequestStatus[_userWallet].addressContract == msg.sender, "You do not have permissions to run this operation");
-
-        Client ClientContract = Client(msg.sender);
-        ClientContract.changeStatus ();
-
-        if (token.balanceOf(msg.sender) > 0 ) {
-            uint balanceUserTokens = token.balanceOf(msg.sender);
-            token.transferTokenRocket(msg.sender,addressContract, balanceUserTokens );
-            payable (_userWallet).transfer(tokenToGwei(balanceUserTokens));
-
-            return "Your contract has been cancelled and your money returned to your wallet.";
-        }else{
-            return "Your contract has been cancelled";
-        }
-    }
-
-    //Funcion para asginar un servicio a un cliente
-    // function asignServiceClient(string memory _nameService, address _userWallet) external onlyClient(_userWallet) {
-    //     require(RequestStatus[_userWallet].addressContract == msg.sender, "You do not have permissions to run this operation");
-    //     require (Services[_nameService].statusService == true, "Service not available");
-    //     require (Services[_nameService].priceService <= token.balanceOf(msg.sender), "Does not have sufficient funds");
-
-    //     token.transferTokenRocket(msg.sender,addressContract, Services[_nameService].priceService);
-    //     servicesClientHistory[msg.sender].push(_nameService);
-
-    //     // emit asignServiceClientEvent ("Correctly assigned service", msg.sender);
-    // }
-
-    //Funcion para asginar un servicio a un cliente
-    function asignServiceClient(string memory _nameService) external onlyClient(msg.sender) {
-        // require(RequestStatus[msg.sender].addressContract != 0, "You do not have permissions to run this operation");
+    // Funcion para asginar un servicio a un cliente
+    function asignServiceClient(string memory _nameService, address _owner) external onlyClient(_owner) {
+        require(RequestStatus[_owner].addressContract == msg.sender, "You do not have permissions to run this operation");
         require (Services[_nameService].statusService == true, "Service not available");
         require (Services[_nameService].priceService <= token.balanceOf(msg.sender), "Does not have sufficient funds");
 
-        token.transferTokenRocket(msg.sender,addressContract, Services[_nameService].priceService);
+        token.transferTokenRocket(msg.sender, addressContract, Services[_nameService].priceService);
         servicesClientHistory[msg.sender].push(_nameService);
 
-        // emit asignServiceClientEvent ("Correctly assigned service", msg.sender);
+        // emit asignServiceClientEvent ("Correctly assigned service");
     }
 
     //Funcion para mostrar los servicios de un Cliente
@@ -340,7 +347,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
         token.transferTokenRocket(msg.sender,SpecialServices[_nameService].laboratory, SpecialServices[_nameService].priceService);
         servicesClientHistory[msg.sender].push(_nameService);
 
-        emit asignServiceClientEvent ("Correctly assigned service");
+        // emit messageEvent ("Correctly assigned service");
     }
 
     //---------------------------------------Contratos laboratorios---------------------------------------
@@ -349,10 +356,10 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function requestSubscriptionLaboratory() public override {
         require(checkRepeatRequest(), "You already have a request to your address.");
         
-        RequestStatus[msg.sender] = Request(uint16(RequestType.LABORATORY), false, address(0), false);
+        RequestStatus[msg.sender] = Request(uint16(RequestType.LABORATORY), false, address(0), false, 'null');
         requestMixed.push(msg.sender);
 
-        emit createFactoryEvent('Successful request');
+        // emit messageEvent('Successful request');
     }
 
     //Funcion para crear el contrato de un laboratorio cuando ya está habilitado
@@ -361,6 +368,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
         address laboratoryAddressContract = address(new Laboratory(msg.sender, addressContract ));
         RequestStatus[msg.sender].addressContract = laboratoryAddressContract;
+        RequestStatus[msg.sender].statusContract = 'active';
 
         emit createFactoryEvent("Contract created", laboratoryAddressContract);
     }
@@ -373,7 +381,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
         SpecialServices[_name] = SpecialService(_price, true, msg.sender);
         listSpecialServices.push(_name);
 
-        emit createServiceEvent("A new special service has been created.");
+        // emit messageEvent("A new special service has been created.");
     }
 
     //Funcion para cambiar el estado de los servicios especiales
@@ -382,30 +390,12 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
         SpecialServices[_name].statusService = !SpecialServices[_name].statusService;
 
-        emit changeStatusServiceEvent("Special service status has been successfully changed.");
+        // emit messageEvent("Special service status has been successfully changed.");
     }
 
     //Funcion para mostrar lista de servicios especiales
     function showListServiceSpecial () public view returns (string [] memory){
         return listSpecialServices;
-    }
-
-    //Funcion cancelar contrato de laborario
-    function cancelContractLaboratory(address _laboratory) external payable onlyLaboratories(_laboratory) returns(string memory){
-        require(RequestStatus[_laboratory].addressContract == msg.sender, "You do not have permissions to run this operation");
-
-        Laboratory LaboratoryContract = Laboratory(msg.sender);
-        LaboratoryContract.changeStatus ();
-
-        if (token.balanceOf(msg.sender) > 0 ) {
-            uint balanceLaboratyTokens = token.balanceOf(msg.sender);
-            token.transferTokenRocket(msg.sender, addressContract, balanceLaboratyTokens );
-            payable (_laboratory).transfer(tokenToGwei(balanceLaboratyTokens));
-
-            return "Your contract has been cancelled and your money returned to your wallet.";
-        }else{
-            return "Your contract has been cancelled";
-        }
     }
 
     //Funcion para canjear sus tokens por dinero

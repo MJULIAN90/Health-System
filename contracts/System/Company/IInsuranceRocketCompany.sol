@@ -6,21 +6,13 @@ interface InterfaceRocket {
     //---------------------------------------Events---------------------------------------
     //Evento para notificar una recarga de tokens al contrato
     event rechargeTokensEvent(uint16);
-    //Evento para notificar el cambio de estado de un servicio
-    event changeStatusServiceEvent(string);
-    //Evento para notificar un servicio creado
-    event createServiceEvent(string);
-    //Evento para notificar cuando se habilita un cliente o laboratorio
-    event enableSubscriptionEvent(string);
+
     //Evento para notificar cuando se crea un contrato apra cliente
     event createFactoryEvent(string, address);
-    //Evento servicio asginado a un usuario
-    // event asignServiceClientEvent (string , address);
-    event asignServiceClientEvent (string );
 
-    //Evento Petcion de cliente o laboratorio exitosa
-    event createFactoryEvent (string);
-    
+    //Evento para enviar mensajes
+    event messageEvent (string);
+
     //---------------------------------------Structs---------------------------------------
     //Servicios ofrecidos (precio y estado)
     struct Service {
@@ -42,6 +34,7 @@ interface InterfaceRocket {
         bool statusRequest;
         address addressContract;
         bool isRequest;
+        string statusContract;
     }
 
     //---------------------------------------Funciones---------------------------------------

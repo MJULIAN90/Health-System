@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-
 import initWeb3 from '../config/initContrat'
 import useAlerts from './useAlerts';
 
@@ -13,7 +12,6 @@ const useInit = ()=>{
         status:false
     })
     const [balanceEthers, setBalanceEthers] = useState(0);
-
 
     useEffect(() => {
         window.ethereum.on("accountsChanged", () => {
@@ -43,15 +41,16 @@ const useInit = ()=>{
         setUseWeb3(web3)
     }
     
-    // Role user
     const getRole = async () => {
         if (instanceContract){
             const owner = await instanceContract.owner().call()
             if (owner !== account[0]) {
                 let responseRole = await instanceContract.showStatusAndRole().call({ from: account [0]})
+                
                 setRoleUser({
                     role: responseRole[0] === '0' ? 'Client' : 'Laboratory',
-                    status: responseRole[1]
+                    status: responseRole[1],
+                    statusContract: responseRole[3]
                 })
             } else {
                 setRoleUser({
@@ -74,17 +73,47 @@ const useInit = ()=>{
     }
 
     const getNewUser = async () =>{
-        let signer = await useWeb3.eth.getAccounts()
-        const response = await instanceContract.requestSubscriptionClient().send({ from: signer[0] })
-        const messageResponse = response.events.createFactoryEvent.returnValues[0];
-        alertMessage (messageResponse, 'success');
+        try {
+        if (roleUser.statusContract === ''){
+            await instanceContract.requestSubscriptionClient().send({ from: account[0] })
+            alertMessage('Successful request', 'success');
+            getRole()
+        }else{
+            return alertMessage('you have a subscription', 'info')
+        }
+            
+
+        } catch (error) {
+            alertMessage('Error in your request');
+        }
     }
 
     const getNewLaboratory = async () => {
-        let signer = await useWeb3.eth.getAccounts()
-        const response = await instanceContract.requestSubscriptionLaboratory().send({ from: signer[0] })
-        const messageResponse = response.events.createFactoryEvent.returnValues[0];
-        alertMessage(messageResponse, 'success');
+        try {
+            if (roleUser.statusContract === '') {
+                const response = await instanceContract.requestSubscriptionLaboratory().send({ from: account[0] })
+                const messageResponse = response.events.createFactoryEvent.returnValues[0];
+                alertMessage(messageResponse, 'success');
+                getRole()
+                // window.location.reload();
+            } else {
+                return alertMessage('you have a subscription', 'info')
+            }
+        } catch (error) {
+            alertMessage('You have a peticion pending');
+        }
+
+    }
+
+    const onSumit = (navigate) => {
+        if (roleUser.statusContract !== '') {
+            if (roleUser.statusContract === 'banned') return alertMessage('You account has been baneed', 'info')
+            else if (roleUser.statusContract === 'inactive') return alertMessage('You contract has been disabled', 'info')
+            else if (roleUser.statusContract === 'initial') return alertMessage('You have to wait for your account activation', 'info')
+            else
+                return navigate("/home")
+        }
+        return alertMessage('you need a subscription', 'error')
     }
 
     return{
@@ -96,6 +125,7 @@ const useInit = ()=>{
         getRole,
         getNewUser,
         getNewLaboratory,
+        onSumit,
     }
 }
 

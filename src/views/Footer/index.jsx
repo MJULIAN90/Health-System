@@ -1,10 +1,14 @@
 import React from 'react'
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
 
 const Footer = () => {
   return (
-      <Container>Footer</Container>
+    <Container>    
+      <Typography>© {new Date().getFullYear()} Original designs by </Typography>
+      <Typography>Martin Julian Ruiz Velásquez </Typography>
+      <Typography>Andrés Felipe Velásquez Trujillo</Typography>
+   </Container>
   )
 }
 

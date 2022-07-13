@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import useAlerts from "./useAlerts"
 import SimpleStorageContract from "../contracts/Client.json"
 import { isContractValid } from '../utils';
+import { useNavigate } from "react-router-dom";
 
 const useUser = (props) => {
+  const navigate = useNavigate();
   const { instanceContract, account, useWeb3 } = props;
   const { alertMessage } = useAlerts()
   const [instanceContractClient, setInstanceContractClient] = useState(false)
@@ -13,7 +15,6 @@ const useUser = (props) => {
   const [listServiceHistory, setListServiceHistory] = useState([]);
   const [numberContract, setnumberContract] = useState(0)
   const [balanceClient, setbalanceClient] = useState(0)
-
 
   useEffect(() => {
     getCheckNumberContract()
@@ -39,15 +40,14 @@ const useUser = (props) => {
   }
 
   const getActiveContract = async () => {
-
     try {
-      let response = await instanceContract.createClientFactory().send({ from: account[0] });
-      const messageResponse = response.events.rechargeTokensEvent.returnValues;
+      const response = await instanceContract.createClientFactory().send({ from: account[0] });
+      const messageResponse = response.events.createFactoryEvent.returnValues;
+      getCheckNumberContract()
 
       alertMessage(`${messageResponse[0]} # ${messageResponse[1]}`, 'success');
-      getCheckNumberContract()
     } catch (error) {
-
+      alertMessage ('Error creating your contract')
     }
   }
 
@@ -65,79 +65,76 @@ const useUser = (props) => {
       await instanceContractClient.buyTokens(quantity).send({ from: account[0], value: await useWeb3.utils.toWei(quantity, 'ether') });
       getBalanceClient()
 
-      alertMessage('Tockes recharge', 'success')
+      alertMessage('Tockens recharged', 'success')
     } catch (error) {
       alertMessage('Insufficient balance')
     }
   }
 
   const getListBasicServices = async () => {
-    
+    if (numberContract !== 0) {
+      try {
+        const response = await instanceContractClient.listServices().call();
+        const responseDetails = await Promise.all(response.map(async (name) => await instanceContractClient.detailsService(name).call()));
 
-    try {
-      const response = await instanceContractClient.listServices().call();
-      const responseDetails = await Promise.all(response.map(async (name) => await instanceContractClient.detailsService(name).call()));
-
-      setListBasicService(responseDetails);
-    } catch (error) {
-      alertMessage ()
+        setListBasicService(responseDetails);
+      } catch (error) {
+        alertMessage()
+      }
+    } else {
+      alertMessage("You don't have a contract active", 'info')
     }
   }
 
   const getListSpecialServices = async () => {
-    try {
-      const response = await instanceContractClient.listSpecialServices().call();
-      const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContractClient.detailsSpecialService(name).call()));
+    if (numberContract !== 0) {
+      try {
+        const response = await instanceContractClient.listSpecialServices().call();
+        const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContractClient.detailsSpecialService(name).call()));
 
-      setListSpecialService(responseSpecialDetails);
-    } catch (error) {
-      alertMessage()
+        setListSpecialService(responseSpecialDetails);
+      } catch (error) {
+        alertMessage()
+      }
+    } else {
+      alertMessage("You don't have a contract active", 'info')
     }
   }
 
   const getServiceHistory = async () => {
-    try {
-      const response = await instanceContractClient.historyServices().call();
+    if (numberContract !== 0){
+      try {
+        const response = await instanceContractClient.historyServices().call();
 
-      setListServiceHistory(response)
-    } catch (error) {
-      alertMessage()
+        setListServiceHistory(response)
+      } catch (error) {
+        alertMessage()
+      }
+    }else{
+      alertMessage("You don't have a contract active", 'info')
     }
+
   }
 
   const cancelContract = async () => {
     try {
-      await instanceContractClient.cancelContract().call();
-      
-      alertMessage('Contract canceled')
+      let response =await instanceContractClient.cancelContract().send({from: account[0]});
+      console.log('response', response);
+      alertMessage('Contract canceled', 'success')
+
+      navigate("/")
     } catch (error) {
       alertMessage()
     }
   }
 
   const getUseBasicService = async (nameService) => {
-/*     useWeb3.eth.getBlock("latest", false, (error, result) => {
-      console.log(result)
-    }) */
-
-    // console.log('instanceContractClient', instanceContractClient);
-
-    // instanceContractClient.useService(nameService).estimateGas(function (error, gasAmount) {
-    //   console.log(error);
-    //   console.log(gasAmount);
-    // });
-
     try {
-      // await instanceContractClient.useService(nameService).send({ from: account[0] });
-      console.log('uer', instanceContractClient );
-      let a = await instanceContract.asignServiceClient(nameService).send({ from: account[0] });
-      // console.log('aaa', a);
-      
+      await instanceContractClient.useService(nameService).send({ from: account[0] });
 
-      alertMessage('Service actived', 'success')
+      alertMessage(`Service ${nameService} purchased`, 'success')
     } catch (error) {
-      console.log('err', error);
-      alertMessage()
+      alertMessage('Error purchasing a service')
     }
   }
 
@@ -145,14 +142,11 @@ const useUser = (props) => {
     try {
       await instanceContractClient.useSpecialService(nameService).call();
 
-      //aca esperar lo de los event
       alertMessage('Service actived')
     } catch (error) {
       alertMessage()
     }
   }
-
-
 
   return {
     buyTokens,

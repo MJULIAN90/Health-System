@@ -56,23 +56,26 @@ export default function VerticalTabs(hooks) {
                 <Tab label="Buy Tokens" {...a11yProps(0)} />
                 <Tab label="Services" {...a11yProps(1)} />
                 <Tab label="Service History" {...a11yProps(2)} />
-                <Tab label="Cancel Contract" {...a11yProps(3)} />
-            </Tabs>
+                {
+                    hooks.numberContract === 0 ?
+                                <Tab label="Active Contract" {...a11yProps(3)} onClick={hooks.getActiveContract} /> :
+                                <Tab label="Cancel Account" {...a11yProps(3)} onClick={hooks.cancelContract} />
+                }
 
-            {/* aca puedo refactorizar los servicios en solo componente*/}
+            </Tabs>
             <MenuUser value={value} index={0}>
                 <BuyTokens {...hooks}/>
             </MenuUser>
             <MenuUser value={value} index={1}>
                 <Services {...hooks}/>
             </MenuUser>
-            {/* aca puedo refactorizar los usuarios en solo componente*/}
             <MenuUser value={value} index={2}>
                 <ServiceHistory {...hooks}/>
             </MenuUser>
             <MenuUser value={value} index={3}>
-                < CancelContract {...hooks}/>
+                <Typography> {hooks.numberContract === 0 ? 'Aca texto para explcar que hace' : 'texto para explcar que hace' } </Typography>
             </MenuUser>
+
         </Box>
     );
 }

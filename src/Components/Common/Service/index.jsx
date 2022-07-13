@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material'
 import React from 'react'
 
-const Service = ({ service, onPressChangeStatus, typeService = false, isBuyService = false, onBuyService }) => {
+const Service = ({ service, onPressChangeStatus=()=>{}, typeService = false, isBuyService = false, onBuyService }) => {
 
     const onchangeStatus = () => {
         onPressChangeStatus(service[0])
@@ -33,7 +33,7 @@ const Service = ({ service, onPressChangeStatus, typeService = false, isBuyServi
             
             {
                 isBuyService &&
-                <Button onClick={handleBuyService} >
+                <Button onClick={handleBuyService} disabled={!service[2]}>
                     Buy Service
                 </Button>
             }

@@ -9,17 +9,12 @@ const User = (props) => {
   return (
     <Box style={{ width: "100%" }}>
       <Grid container marginBottom={5}>
-        <Grid item xs={8}>
-          <Typography variant='h3' margin={3} > User account  {props.account[0]}</Typography>
+        <Grid item xs={6}>
+          <Typography variant='h6' margin={3} > User account  {props.account[0]}</Typography>
         </Grid>
-        <Grid item xs={4} style={{ textAlign: "end" }} >
-          <Typography variant='h6' marginRight={5} > # Contract {hooks.numberContract}</Typography>
-          <Typography variant='h6' marginRight={5}> My tockens {hooks.balanceClient}</Typography>
-          {
-            hooks.numberContract == 0 &&
-            <Button onClick={hooks.getActiveContract} disabled={hooks.numberContract !== 0}>   {hooks.numberContract === 0 ? 'Activate Contract' : 'Contract active'}  </Button>
-          }
-
+        <Grid item xs={6} style={{ textAlign: "end" }} >
+          <Typography variant='h6' marginRight={5} > # Contract:  {hooks.numberContract !== 0 ? hooks.numberContract :'Not available'}</Typography>
+          <Typography variant='h6' marginRight={5}> Tockens {hooks.balanceClient}</Typography>
         </Grid>
       </Grid>
 

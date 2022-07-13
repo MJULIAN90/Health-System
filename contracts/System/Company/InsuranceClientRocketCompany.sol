@@ -4,7 +4,7 @@ import "./InsuranceRocketCompany.sol";
 
 contract Client{
     address public owner;
-    address private addressContract;
+    address public addressContract;
     address public addressPrincipalContract;
     bool public statusContract;
     InsuranceRocketCompany private IPrincipalContract;
@@ -28,8 +28,8 @@ contract Client{
     event buyTokensEvent(string);
 
     //Funcion cancelar contrato
-    function changeStatus() external {
-        statusContract = false;
+    function changeStatus() private {
+        statusContract = !statusContract;
     }
 
     //---------------------------------------Funciones contrato clientes---------------------------------------
@@ -37,7 +37,7 @@ contract Client{
     function buyTokens(uint16 _quantity) public payable {
         require(statusContract , "No active contract");
         IPrincipalContract.buyTokens{value: msg.value}(_quantity, owner);
-        emit buyTokensEvent("purchased tokens");   
+        // emit buyTokensEvent("purchased tokens");   
     }
 
     //Funcion para devolver ether cuando un Cliente se da de baja
@@ -61,23 +61,17 @@ contract Client{
     //Funcion para cancelar mi contrato
     function cancelContract() public payable {
        require(statusContract , "No active contract a cancelar");
-       IPrincipalContract.cancelContractClient(owner);
-       emit cancelContractEvent("contract cancelled");
+    //    IPrincipalContract.cancelContractClient(owner);
+        IPrincipalContract.changeStatusContract(owner);
+        // changeStatus();
+    //    emit cancelContractEvent("contract cancelled");
     }
 
     //Funcion usar un servicio
-    // function useService(string memory _nameService) public {
-    //     // IPrincipalContract.asignServiceClient(_nameService, owner);
-    //     IPrincipalContract.asignServiceClient(_nameService, addressContract);
-    //     // emit useServiceEvent("assigned service");
-    // }
-
-    //Funcion usar un servicio
-    // function useService(string memory _nameService) public {
-    //     // IPrincipalContract.asignServiceClient(_nameService, owner);
-    //     IPrincipalContract.asignServiceClient(_nameService);
-    //     // emit useServiceEvent("assigned service");
-    // }
+    function useService(string memory _nameService) public {
+        IPrincipalContract.asignServiceClient(_nameService, owner);
+        // emit useServiceEvent("assigned service");
+    }
 
     //Funcion usar un servicio
     function useSpecialService(string memory _nameService) public {
