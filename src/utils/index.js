@@ -1,4 +1,4 @@
-const accountNone = '0x0000000000000000000000000000000000000000'
+export const accountNone = '0x0000000000000000000000000000000000000000'
 
 export const clearDataWallets = (listWallets) => {
     return listWallets.filter(acc => acc !== accountNone)
@@ -13,7 +13,7 @@ export const isContractValid = (numberContract, setnumberContract) => {
     return true
 }
 
-export const hamdleStatusContract = (status, name) => {
+export const handleStatusContract = (status, name) => {
     if (name === 'active') {
         if (status === 'active' || status === 'banned' || status === 'acepted') return true
     }

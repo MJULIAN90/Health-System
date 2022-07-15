@@ -16,7 +16,7 @@ const Laboratory = (props) => {
         </Grid>
         <Grid item xs={4} style={{ textAlign: "end" }}>
           <Typography variant="h6" marginRight={5}>
-            My Balance 0
+            My Balance {hooks.balanceLaboratory}
           </Typography>
         </Grid>
       </Grid>

@@ -60,7 +60,7 @@ const useUser = (props) => {
     }
   }
 
-  const buyTokens = async (quantity) => {
+    const buyTokens = async (quantity) => {
     try {
       await instanceContractClient.buyTokens(quantity).send({ from: account[0], value: await useWeb3.utils.toWei(quantity, 'ether') });
       getBalanceClient()
@@ -102,11 +102,25 @@ const useUser = (props) => {
   }
 
   const getServiceHistory = async () => {
-    if (numberContract !== 0){
-      try {
-        const response = await instanceContractClient.historyServices().call();
+    let arrayData = [];
 
-        setListServiceHistory(response)
+    if (numberContract !== 0){
+      
+      try {
+        const counter = await instanceContract.counterServices().call();
+
+        if (counter > 0){
+          for (let i = 0; i < counter; i++) {
+            const response = await instanceContract.showDetailServiceUsed(i).call();
+
+            if (response[1] === numberContract) {
+              arrayData.push(response)
+            }
+          }
+
+          setListServiceHistory(arrayData)
+        }
+
       } catch (error) {
         alertMessage()
       }
@@ -118,8 +132,7 @@ const useUser = (props) => {
 
   const cancelContract = async () => {
     try {
-      let response =await instanceContractClient.cancelContract().send({from: account[0]});
-      console.log('response', response);
+      await instanceContractClient.cancelContract().send({from: account[0]});
       alertMessage('Contract canceled', 'success')
 
       navigate("/")
@@ -131,20 +144,26 @@ const useUser = (props) => {
   const getUseBasicService = async (nameService) => {
     try {
       await instanceContractClient.useService(nameService).send({ from: account[0] });
+      getListBasicServices()
+      getBalanceClient()
 
       alertMessage(`Service ${nameService} purchased`, 'success')
     } catch (error) {
-      alertMessage('Error purchasing a service')
+      alertMessage('Error in the transaction check your balance or internet connection')
     }
   }
 
   const getUseSpecialService = async (nameService) => {
     try {
-      await instanceContractClient.useSpecialService(nameService).call();
+      await instanceContractClient.useSpecialService(nameService).send({from:account[0]});
+      getBalanceClient()
+      getListSpecialServices()
+      getBalanceClient()
 
-      alertMessage('Service actived')
+      alertMessage('Service actived', 'success')
     } catch (error) {
-      alertMessage()
+
+      alertMessage('Error in the transaction check your balance or internet connection')
     }
   }
 

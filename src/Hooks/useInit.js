@@ -91,16 +91,15 @@ const useInit = ()=>{
     const getNewLaboratory = async () => {
         try {
             if (roleUser.statusContract === '') {
-                const response = await instanceContract.requestSubscriptionLaboratory().send({ from: account[0] })
-                const messageResponse = response.events.createFactoryEvent.returnValues[0];
-                alertMessage(messageResponse, 'success');
+                 await instanceContract.requestSubscriptionLaboratory().send({ from: account[0] })
+      
+                alertMessage('Successful request', 'success');
                 getRole()
-                // window.location.reload();
             } else {
                 return alertMessage('you have a subscription', 'info')
             }
         } catch (error) {
-            alertMessage('You have a peticion pending');
+            alertMessage('Error in your request');
         }
 
     }

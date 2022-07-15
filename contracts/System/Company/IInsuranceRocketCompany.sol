@@ -37,6 +37,14 @@ interface InterfaceRocket {
         string statusContract;
     }
 
+    struct ServicesUsed {
+        address onwer;
+        address client;
+        string typeService;
+        uint price;
+        string name;
+    }
+
     //---------------------------------------Funciones---------------------------------------
     //Funcion para recargar tokens al contrato
     function rechargeTokens(uint16 _amount) external;
@@ -45,7 +53,6 @@ interface InterfaceRocket {
     function showActivedServices() external returns(string[] memory);
 
     //Funcion para mostrar un servicio por su nombre
-    //function showService(string memory _name) external returns(Service memory);
     function showServiceDetails(string memory _name) external returns(string memory , uint16 , bool);
 
     //Funcion para crear servicios
@@ -53,9 +60,6 @@ interface InterfaceRocket {
 
     //Funcion para cambiar el estado de los servicios
     function changeStatusService(string memory _name) external;
-
-    //Funcion para convertir el precio de tokens a ethers
-    /* function tokenToEthers(uint16 _quantity) external pure returns(uint16); */
 
     //Funcion para solicitar una suscripcion para un cliente
     function requestSubscriptionClient() external;

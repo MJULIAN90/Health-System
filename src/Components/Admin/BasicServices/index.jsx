@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { Container, List, Box } from '@mui/material';
-import { CreateService } from './Components';
+import { CreateService } from '../../Common';
 import { Service } from '../../Common'
 
 

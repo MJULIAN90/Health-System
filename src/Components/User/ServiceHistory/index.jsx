@@ -8,12 +8,17 @@ const ServiceHistory = ({listServiceHistory, getServiceHistory}) => {
   }, [])
 
   return (
-    <Container id="tr">
+    <Container >
       {
         listServiceHistory && listServiceHistory.length > 0 && listServiceHistory.map(element => {
 
           return(
-            <Typography > {element} </Typography>
+            <>
+              <Typography >Seller {element[0]} </Typography>
+              <Typography >Type service {element[2]} </Typography>
+              <Typography >Name service {element[4]} </Typography>
+              <Typography >Price {element[3]} </Typography>
+            </>
           )
         })
       }

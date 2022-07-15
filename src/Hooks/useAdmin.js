@@ -72,13 +72,32 @@ const useAdmin = (props) => {
     }
 
     const getSpecialServices = async () => {
+
+        let arrayData = [];
+
         try {
-            const response = instanceContract.showListServiceSpecial().call()
-            const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContract.showSpecialServiceDetails(name).call()));
-            setListSpecialServices(responseSpecialDetails);
+            const counter = await instanceContract.counterServices().call();
+            if (counter > 0) {
+                for (let i = 0; i < counter; i++) {
+                    const response = await instanceContract.showDetailServiceUsed(i).call();
+                    if (response[2] === "special") {
+                        arrayData.push(response)
+                    }
+                }
+
+                setListSpecialServices(arrayData)
+            }
         } catch (error) {
-            alertMessage('Error loading services');
+            alertMessage()
         }
+
+        // try {
+        //     const response = instanceContract.showListServiceSpecial().call()
+        //     const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContract.showSpecialServiceDetails(name).call()));
+        //     setListSpecialServices(responseSpecialDetails);
+        // } catch (error) {
+        //     alertMessage('Error loading services');
+        // }
     }
 
     const getPendintRequest = async (name) => {
@@ -144,7 +163,8 @@ const useAdmin = (props) => {
                     return data.push({
                         wallet: client,
                         status: response[1],
-                        addresContract: response[2]
+                        addresContract: response[2],
+                        statusContract: response[3]
                     })
                 }
             }))
@@ -159,6 +179,7 @@ const useAdmin = (props) => {
             await instanceContract.bannedUser(add).send({ from: account[0] });
             alertMessage('Contract user has been banned', 'success');
             getClients()
+            getLaboratories()
         } catch (error) {
             alertMessage("Error in transaction");
         }
@@ -169,6 +190,7 @@ const useAdmin = (props) => {
             await instanceContract.unBannedUser(add).send({ from: account[0] });
             alertMessage('Contract user has been actived', 'success');
             getClients()
+            getLaboratories()
         } catch (error) {
             alertMessage("Error in transaction");
         }

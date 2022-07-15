@@ -1,6 +1,6 @@
 import { List, Box, Button } from '@mui/material'
 import React from 'react'
-import { hamdleStatusContract } from '../../../utils'
+import { handleStatusContract } from '../../../utils'
 
 const InfoClient = ({ name, list, unBanUser, banUser }) => {
 
@@ -21,9 +21,9 @@ const InfoClient = ({ name, list, unBanUser, banUser }) => {
                                             <li > Account status:  {status ? 'Active' : 'Inactive'}</li>
                                             <li>  Status contract: {statusContract}</li>
                                         </ul>
-                                        <Button onClick={() => { banUser(wallet) }} disabled={hamdleStatusContract(statusContract, 'block')} > Block contract </Button>
-                                        <Button onClick={() => { unBanUser(wallet) }} disabled={hamdleStatusContract(statusContract, 'unblock')} > Unblock contract </Button>
-                                        <Button onClick={() => { unBanUser(wallet) }} disabled={hamdleStatusContract(statusContract, 'active')} > Active contract </Button>
+                                        <Button onClick={() => { banUser(wallet) }} disabled={handleStatusContract(statusContract, 'block')} > Block contract </Button>
+                                        <Button onClick={() => { unBanUser(wallet) }} disabled={handleStatusContract(statusContract, 'unblock')} > Unblock contract </Button>
+                                        <Button onClick={() => { unBanUser(wallet) }} disabled={handleStatusContract(statusContract, 'active')} > Active contract </Button>
 
                                     </>
 

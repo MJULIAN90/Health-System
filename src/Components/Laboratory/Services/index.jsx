@@ -1,22 +1,34 @@
-import { Button } from "@mui/material";
+import { Box, Button, List } from "@mui/material";
 import { Container } from "@mui/material";
 import React, { useEffect } from "react";
+import { CreateService, Service } from "../../Common";
 
-const Services = ({ services, serviceList }) => {
+const Services = ({ getSpecialServices, specialServiceList, onChangeStatusSpecialService, getCreateSpecialService }) => {
+
   useEffect(() => {
-    services();
+    getSpecialServices();
   }, [])
 
+  const onPressChangeStatus = (name) => {
+    onChangeStatusSpecialService(name);
+  }
+
   return (
-    <Container id="tr">
-      {
-        serviceList.length > 0 && serviceList.map(element => {
-          let a = document.createElement("div");
-          a.innerHTML = `${element}`
-          let container = document.getElementById("tr")
-          container && container.append(a);
-        })
-      }
+    <Container>
+      <CreateService getCreateService={getCreateSpecialService} />
+      <Box>
+        {specialServiceList.length === 0 ? 'we do not have basic services' :
+          <List>
+             {
+              specialServiceList.map(service => {
+                return (
+                  <Service service={service} typeService onPressChangeStatus={onPressChangeStatus} />
+                )
+              })
+            }
+          </List>
+        }
+      </Box> 
     </Container>
   );
 };

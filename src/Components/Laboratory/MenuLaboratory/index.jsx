@@ -9,6 +9,7 @@ import { Button } from "@mui/material";
 import CancelContract from "../CancelContract";
 import WithdrawalMoney from "../WithdrawalMoney";
 import Services from "../Services";
+import Users from "../Users";
 
 const MenuLaboratory = (props) => {
   const { children, value, index, ...other } = props;
@@ -63,26 +64,28 @@ export default function VerticalTabs(hooks) {
       >
         <Tab label="Laboratory Information" {...a11yProps(0)} />
         <Tab label="My Services" {...a11yProps(1)} />
-        <Tab label="Users" {...a11yProps(2)} />
+        <Tab label="History users" {...a11yProps(2)} />
         <Tab label="Withdrawal Money" {...a11yProps(3)} />
-        <Tab label="Cancel Contract" {...a11yProps(4)} />
+        <Tab label="Cancel Contract" {...a11yProps(4)} onClick={() => { hooks.cancelContract ()}}/>
       </Tabs>
 
-      {/* aca puedo refactorizar los servicios en solo componente*/}
       <MenuLaboratory value={value} index={0}>
-        {/* <LaboratoryInformation {...hooks}/> */}
       </MenuLaboratory>
+
       <MenuLaboratory value={value} index={1}>
         <Services {...hooks}/>
       </MenuLaboratory>
+
       <MenuLaboratory value={value} index={2}>
-        {/* <Users {...hooks}/> */}
+        <Users {...hooks}/>
       </MenuLaboratory>
+
       <MenuLaboratory value={value} index={3}>
         < WithdrawalMoney {...hooks}/>
       </MenuLaboratory>
+
       <MenuLaboratory value={value} index={4}>
-        <CancelContract {...hooks} />
+        <Typography> carreta para cuando vaya a cancelar</Typography>
       </MenuLaboratory>
     </Box>
   );

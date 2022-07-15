@@ -10,11 +10,12 @@ contract InsuranceRocketCompany is InterfaceRocket{
     ERC20Rocket token;
     address public owner;
     address public addressContract;
+    uint public counterServices;
 
     constructor() {
         token = new ERC20Rocket("MedicineRocket", "MR");
         token.mint(10000);
-
+        counterServices = 0;
         owner = msg.sender;
         addressContract = address(this);
     }
@@ -59,6 +60,9 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
     //Mapping que relacion un address de cada usuario con su historial de servicios
     mapping(address => string []) public servicesClientHistory;
+
+    //Mapping que guarda todos los servicios usados y sus respetivos clientes y provedores
+    mapping(uint => ServicesUsed) public ServicesUsedClient;
 
     //---------------------------------------Enums---------------------------------------
     //Enum para clasificar el tipo de peticion de suscripcion
@@ -168,7 +172,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
     }
 
     //Funcion para mostrar un servicio por su nombre
-    //function showService(string memory _name) public view override returns(Service memory){return Services[_name];} 
     function showServiceDetails(string memory _name) public view override returns(string memory, uint16, bool){
         return (_name, Services[_name].priceService, Services[_name].statusService);
     }
@@ -191,7 +194,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
     //Funcion para saber el role y el status de cada usuario o laboratorio
     function showStatusAndRole() public view returns(uint16, bool, bool, string memory){
-        //Agragar require que pregunte si existe o no y validar
         return (RequestStatus[msg.sender].requestType, RequestStatus[msg.sender].statusRequest, RequestStatus[msg.sender].isRequest, RequestStatus[msg.sender].statusContract );
     }
 
@@ -206,12 +208,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
             uint balanceUserTokens = token.balanceOf(msg.sender);
             token.transferTokenRocket(msg.sender,addressContract, balanceUserTokens );
             payable (_userWallet).transfer(tokenToGwei(balanceUserTokens));
-
-            //  emit messageEvent ("Your contract has been cancelled and your money returned to your wallet.");
         }
-        // else{
-        //      emit messageEvent ("Your contract has been cancelled");
-        // }
     }
 
     //---------------------------------------Funciones para el admin ---------------------------------------
@@ -246,14 +243,11 @@ contract InsuranceRocketCompany is InterfaceRocket{
         RequestStatus[_addr].statusRequest = true;
         RequestStatus[_addr].isRequest = true;
         RequestStatus[_addr].statusContract = 'acepted';
-        // emit messageEvent("A subscription has been enabled");
     }
 
     //Funcion para cambiar el estado de los servicios
     function changeStatusService(string memory _name) public override onlyOwner{
         Services[_name].statusService = !Services[_name].statusService;
-
-        // emit messageEvent("The service status has been successfully changed.");
     }
 
     //Funcion para crear servicios
@@ -263,8 +257,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
         Services[_name] = Service(_name, _price, true);
 
         listServices.push(_name);
-
-        // emit messageEvent("A new service has been created.");
     }
 
     //Funcion para mostrar los servicios basicos disponibles
@@ -285,17 +277,11 @@ contract InsuranceRocketCompany is InterfaceRocket{
     //Funcion para banear un cliente o laboratorio
     function bannedUser(address _addr) public onlyOwner{
         RequestStatus[_addr].statusContract = 'banned';
-
-        // emit messageEvent("User banned");
     }
 
     //Funcion para desbanear un cliente o laboratorio
     function unBannedUser(address _addr ) public onlyOwner{
         RequestStatus[_addr].statusContract = 'active';
-
-        // Client ClientContract = Client(msg.sender);
-        // ClientContract.changeStatus ();
-        // emit messageEvent("User unbanned");
     }
 
     //---------------------------------------Contrato clientes---------------------------------------
@@ -303,12 +289,8 @@ contract InsuranceRocketCompany is InterfaceRocket{
     //Funcion para solicitar una suscripcion para un cliente
     function requestSubscriptionClient() public override {
         require(checkRepeatRequest(), "You already have a request to your address.");
-        // require(keccak256(abi.encodePacked(RequestStatus[msg.sender].statusContract)) != keccak256(abi.encodePacked('inactive')), "Your contract is disable.");
-        // require(keccak256(abi.encodePacked(RequestStatus[msg.sender].statusContract)) != keccak256(abi.encodePacked('banned')), "Your account is banned.");
         RequestStatus[msg.sender] = Request(uint16(RequestType.CLIENT), false, address(0), false, 'initial');
         requestMixed.push(msg.sender);
-
-        // emit messageEvent('Successful request');
     }
 
     //Funcion para creacion de contrato de Cliente
@@ -330,13 +312,14 @@ contract InsuranceRocketCompany is InterfaceRocket{
         token.transferTokenRocket(msg.sender, addressContract, Services[_nameService].priceService);
         servicesClientHistory[msg.sender].push(_nameService);
 
-        // emit asignServiceClientEvent ("Correctly assigned service");
+        ServicesUsedClient[counterServices] = ServicesUsed(addressContract, msg.sender, 'basic', Services[_nameService].priceService, _nameService );
+        counterServices++;
     }
 
     //Funcion para mostrar los servicios de un Cliente
-    function showServicesClient(address _userWallet) external view onlyClient(_userWallet) returns(string [] memory){
-        return servicesClientHistory[msg.sender];
-    }
+    // function showServicesClient(address _userWallet) external view onlyClient(_userWallet) returns(string [] memory){
+    //     return servicesClientHistory[msg.sender];
+    // }
 
     //Funcion para asginar un servicio especial a un cliente
     function asignSpecialServiceClient(string memory _nameService, address _userWallet) external onlyClient(_userWallet) {
@@ -347,7 +330,12 @@ contract InsuranceRocketCompany is InterfaceRocket{
         token.transferTokenRocket(msg.sender,SpecialServices[_nameService].laboratory, SpecialServices[_nameService].priceService);
         servicesClientHistory[msg.sender].push(_nameService);
 
-        // emit messageEvent ("Correctly assigned service");
+        ServicesUsedClient[counterServices] = ServicesUsed(SpecialServices[_nameService].laboratory, msg.sender, 'special', SpecialServices[_nameService].priceService, _nameService );
+        counterServices++;
+    }
+
+    function showDetailServiceUsed(uint _position) public view returns(address, address, string memory, uint, string memory){
+        return (ServicesUsedClient[_position].onwer, ServicesUsedClient[_position].client, ServicesUsedClient[_position].typeService, ServicesUsedClient[_position].price, ServicesUsedClient[_position].name);
     }
 
     //---------------------------------------Contratos laboratorios---------------------------------------
@@ -356,10 +344,8 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function requestSubscriptionLaboratory() public override {
         require(checkRepeatRequest(), "You already have a request to your address.");
         
-        RequestStatus[msg.sender] = Request(uint16(RequestType.LABORATORY), false, address(0), false, 'null');
+        RequestStatus[msg.sender] = Request(uint16(RequestType.LABORATORY), false, address(0), false, 'initial');
         requestMixed.push(msg.sender);
-
-        // emit messageEvent('Successful request');
     }
 
     //Funcion para crear el contrato de un laboratorio cuando ya está habilitado
@@ -380,8 +366,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
         SpecialServices[_name] = SpecialService(_price, true, msg.sender);
         listSpecialServices.push(_name);
-
-        // emit messageEvent("A new special service has been created.");
     }
 
     //Funcion para cambiar el estado de los servicios especiales
@@ -389,8 +373,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
         require(RequestStatus[ownerLaboratory].addressContract == msg.sender, "You do not have permissions to run this operation");
 
         SpecialServices[_name].statusService = !SpecialServices[_name].statusService;
-
-        // emit messageEvent("Special service status has been successfully changed.");
     }
 
     //Funcion para mostrar lista de servicios especiales
@@ -399,7 +381,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
     }
 
     //Funcion para canjear sus tokens por dinero
-    function withdrawBalanceLaboratory(address _laboratoryWallet, uint16 _quantityTokens) external payable onlyLaboratories(_laboratoryWallet) returns(string memory){
+    function withdrawBalanceLaboratory(address _laboratoryWallet, uint16 _quantityTokens) external payable onlyLaboratories(_laboratoryWallet) {
         require (token.balanceOf(msg.sender) > 0, "Insufficient balance");
  
         uint balanceLaboratyTokens = token.balanceOf(msg.sender);
@@ -407,14 +389,14 @@ contract InsuranceRocketCompany is InterfaceRocket{
             token.transferTokenRocket(msg.sender, addressContract, _quantityTokens);
             payable(_laboratoryWallet).transfer(tokenToGwei(_quantityTokens));
 
-            return "your retirement has been successful";
+            emit messageEvent ("your retirement has been successful");
+        }else{
+            emit messageEvent ("It does not have sufficient funds.");
         }
-
-        return "It does not have sufficient funds.";
     }
 
     //Funcion para que cada laboratorio pueda ver sus servicios
-    function showMyActivedSpecialServices() external view returns(string[] memory){
+    function showSpecialServicesByLaboratory() external view returns(string[] memory){
         string[] memory activedSpecialServices = new string[] (listSpecialServices.length);
         uint16 counter = 0;
 
@@ -424,7 +406,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
                 counter++;
             }
         }
-
         return activedSpecialServices;
     }
 }
