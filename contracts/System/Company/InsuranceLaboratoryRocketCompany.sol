@@ -43,7 +43,7 @@ contract Laboratory{
         return IPrincipalContract.showSpecialServicesByLaboratory();
     }
 
-    function detailsSpecialService(string memory _name) public  view returns(string memory , uint16 , bool){
+    function detailsSpecialService(string memory _name) public  view returns(string memory , uint16 , bool, address){
        return IPrincipalContract.showSpecialServiceDetails(_name);
     }
 }

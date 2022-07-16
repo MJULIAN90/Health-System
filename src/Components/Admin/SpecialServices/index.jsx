@@ -11,14 +11,14 @@ const SpecialServices = ({ listSpecialServices, getSpecialServices }) => {
   return (
     <Container >
       {
-        listSpecialServices.length === 0 ? 'we do not have users' : listSpecialServices.map(element => {
+        listSpecialServices.length === 0 ? 'we do not have special services' : listSpecialServices.map(element => {
 
           return (
             <>
-              <Typography >Contract Laboratory: {element[0]} </Typography>
-              <Typography >Contract Client: {element[1]} </Typography>
-              <Typography >Name service: {element[4]} </Typography>
-              <Typography >Price: {element[3]} tockens</Typography>
+              <Typography >Laboratory: {element[3]}</Typography>
+              <Typography >Name service: {element[0].toUpperCase()} </Typography>
+              <Typography >Price service: {element[1]} TOCKENS</Typography>
+              <Typography >Status service: {element[2] ? "ACTIVE" : "INACTIVE"} </Typography>
             </>
           )
         })

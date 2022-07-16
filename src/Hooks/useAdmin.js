@@ -12,6 +12,7 @@ const useAdmin = (props) => {
     const [listPendingLaboratory, setListPendingLaboratory] = useState([]);
     const [listClients, setlistClients] = useState([]);
     const [listLaboratories, setlistLaboratories] = useState([]);
+    const [listServiceHistory, setListServiceHistory] = useState([])
 
     useEffect(() => {
         getBalanceContract();
@@ -29,7 +30,6 @@ const useAdmin = (props) => {
     const getRechargeTokens = async (amount) => {
         try {
              await instanceContract.rechargeTokens(parseInt(amount)).send({ from: account[0] });
-            // const messageResponse = response.events.rechargeTokensEvent.returnValues[0];
             getBalanceContract ()
             alertMessage(`Tockens recharge ${amount}`, 'success');
         } catch (error) {
@@ -49,12 +49,10 @@ const useAdmin = (props) => {
 
     const onChangeStatusService = async (name) => {
         try {
-            /* const response = */ await instanceContract.changeStatusService(name).send({ from: account[0] });
-            // const messageResponse = response.events.changeStatusServiceEvent.returnValues[0];
+            await instanceContract.changeStatusService(name).send({ from: account[0] });
 
             alertMessage('The service status has been successfully changed', 'success');
             getBasicServices();
-            // return response;
         } catch (error) {
             alertMessage();
         }
@@ -62,8 +60,8 @@ const useAdmin = (props) => {
 
     const getCreateService = async (price, name) => {
         try {
-            /* const response =  */await instanceContract.createService(name, price).send({ from: account[0] });
-            // const messageResponse = response.events.messageEvent.returnValues[0];
+            await instanceContract.createService(name, price).send({ from: account[0] });
+
             alertMessage('A new service has been created', 'success');
             getBasicServices()
         } catch (error) {
@@ -72,32 +70,13 @@ const useAdmin = (props) => {
     }
 
     const getSpecialServices = async () => {
-
-        let arrayData = [];
-
         try {
-            const counter = await instanceContract.counterServices().call();
-            if (counter > 0) {
-                for (let i = 0; i < counter; i++) {
-                    const response = await instanceContract.showDetailServiceUsed(i).call();
-                    if (response[2] === "special") {
-                        arrayData.push(response)
-                    }
-                }
-
-                setListSpecialServices(arrayData)
-            }
+            const response = await instanceContract.showListServiceSpecial().call()
+            const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContract.showSpecialServiceDetails(name).call()));
+            setListSpecialServices(responseSpecialDetails);
         } catch (error) {
-            alertMessage()
+            alertMessage('Error loading services');
         }
-
-        // try {
-        //     const response = instanceContract.showListServiceSpecial().call()
-        //     const responseSpecialDetails = await Promise.all(response.map(async (name) => await instanceContract.showSpecialServiceDetails(name).call()));
-        //     setListSpecialServices(responseSpecialDetails);
-        // } catch (error) {
-        //     alertMessage('Error loading services');
-        // }
     }
 
     const getPendintRequest = async (name) => {
@@ -121,9 +100,8 @@ const useAdmin = (props) => {
 
     const getEnableSubscription = async (add) => {
         try {
-            /* const response = */await  instanceContract.enableSubscription(add).send({ from: account[0] });
-            // const messageResponse = response.events.messageEvent.returnValues[0];
-            // alertMessage(messageResponse, 'success');
+            await  instanceContract.enableSubscription(add).send({ from: account[0] });
+
             alertMessage('A subscription has been enabled', 'success');
             getPendintRequest('Client');
             getPendintRequest('Laboratory');
@@ -139,11 +117,15 @@ const useAdmin = (props) => {
             await Promise.all(listUsers.map(async client => {
                 const response = await instanceContract.showDetailsUser(client).call()
                 if (response[0] === '0' && response[1] === true) {
+
+                    const balance = await instanceContract.balanceContractUser(response[2]).call()
+                    
                     return array.push({
                         wallet: client,
                         status: response[1],
                         addresContract: response[2],
-                        statusContract: response[3]
+                        statusContract: response[3],
+                        BalanceUser: balance,
                     })
                 }
             }))
@@ -160,11 +142,15 @@ const useAdmin = (props) => {
             await Promise.all(listUsers.map(async client => {
                 const response = await instanceContract.showDetailsUser(client).call()
                 if (response[0] === '1' && response[1] === true) {
+
+                    const balance = await instanceContract.balanceContractUser(response[2]).call()
+
                     return data.push({
                         wallet: client,
                         status: response[1],
                         addresContract: response[2],
-                        statusContract: response[3]
+                        statusContract: response[3],
+                        BalanceUser: balance,
                     })
                 }
             }))
@@ -183,7 +169,7 @@ const useAdmin = (props) => {
         } catch (error) {
             alertMessage("Error in transaction");
         }
-     }
+    }
 
     const onUnBanUser = async (add) => {
         try {
@@ -194,7 +180,27 @@ const useAdmin = (props) => {
         } catch (error) {
             alertMessage("Error in transaction");
         }
-     }
+    }
+
+    const getHistoryTransaction = async () => {
+        let arrayData = [];
+
+            try {
+                const counter = await instanceContract.counterServices().call();
+                if (counter > 0) {
+                    for (let i = 0; i < counter; i++) {
+                        const response = await instanceContract.showDetailServiceUsed(i).call();
+                        arrayData.push(response)
+                    }
+
+                    setListServiceHistory(arrayData)
+                }
+
+            } catch (error) {
+                alertMessage()
+            }
+
+    }
 
     return {
         onBanUser,
@@ -208,6 +214,7 @@ const useAdmin = (props) => {
         onChangeStatusService,
         getCreateService,
         getRechargeTokens,
+        getHistoryTransaction,
         balanceContract,
         listBasicServices,
         listSpecialServices,
@@ -215,6 +222,7 @@ const useAdmin = (props) => {
         listPendingClient,
         listClients,
         listLaboratories,
+        listServiceHistory
     }
 }
 

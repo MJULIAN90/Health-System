@@ -107,8 +107,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
     //Funcion para recargar tokens al contrato
     function rechargeTokens(uint16 _amount) public override onlyOwner {
         token.mint(_amount);
-
-        // emit rechargeTokensEvent(_amount);
     }
 
     //Funcion ver tokens de contrato principal
@@ -177,8 +175,8 @@ contract InsuranceRocketCompany is InterfaceRocket{
     }
 
     //Funcion para mostrar un servicio por su nombre
-    function showSpecialServiceDetails(string memory _name) public view  returns(string memory, uint16, bool){
-        return (_name, SpecialServices[_name].priceService, SpecialServices[_name].statusService);
+    function showSpecialServiceDetails(string memory _name) public view  returns(string memory, uint16, bool, address){
+        return (_name, SpecialServices[_name].priceService, SpecialServices[_name].statusService, SpecialServices[_name].laboratory );
     }
 
     //Funcion para revisar el numero de contrato de cada cliente
@@ -190,7 +188,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
     function balanceContractUser(address _addr) public view returns (uint){
         return token.balanceOf(_addr);
     }
-
 
     //Funcion para saber el role y el status de cada usuario o laboratorio
     function showStatusAndRole() public view returns(uint16, bool, bool, string memory){
@@ -316,11 +313,6 @@ contract InsuranceRocketCompany is InterfaceRocket{
         counterServices++;
     }
 
-    //Funcion para mostrar los servicios de un Cliente
-    // function showServicesClient(address _userWallet) external view onlyClient(_userWallet) returns(string [] memory){
-    //     return servicesClientHistory[msg.sender];
-    // }
-
     //Funcion para asginar un servicio especial a un cliente
     function asignSpecialServiceClient(string memory _nameService, address _userWallet) external onlyClient(_userWallet) {
         require(RequestStatus[_userWallet].addressContract == msg.sender, "You do not have permissions to run this operation");
@@ -391,7 +383,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
             emit messageEvent ("your retirement has been successful");
         }else{
-            emit messageEvent ("It does not have sufficient funds.");
+            // emit messageEvent ("It does not have sufficient funds.");
         }
     }
 

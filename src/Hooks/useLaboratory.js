@@ -96,8 +96,12 @@ const useLaboratory = (props) => {
   const getSpecialServices = async () => {
     try {
       const response = await instanceContractLaboratory.listSpecialServices().call();
-      const responseDetails = await Promise.all(response.map(async (name) => await instanceContractLaboratory.detailsSpecialService(name).call()));
-      setSpecialServiceList(responseDetails);
+      const responseDetails = await Promise.all(response.map(async (name) => 
+         name !== '' && await instanceContractLaboratory.detailsSpecialService(name).call()
+      ));
+      const data = responseDetails.filter(item => item !== false)
+
+      setSpecialServiceList(data);
 
     } catch (error) {
       alertMessage('Error loading list services');

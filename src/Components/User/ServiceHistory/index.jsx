@@ -14,10 +14,10 @@ const ServiceHistory = ({listServiceHistory, getServiceHistory}) => {
 
           return(
             <>
-              <Typography >Seller {element[0]} </Typography>
-              <Typography >Type service {element[2]} </Typography>
-              <Typography >Name service {element[4]} </Typography>
-              <Typography >Price {element[3]} </Typography>
+              <Typography >Laboratory: {element[0]} </Typography>
+              <Typography >Type service: {element[2]} </Typography>
+              <Typography >Name service: {element[4]} </Typography>
+              <Typography >Price service: {element[3]} tockens  </Typography>
             </>
           )
         })

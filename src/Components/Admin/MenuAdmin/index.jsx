@@ -3,7 +3,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { BasicServices, SpecialServices, RechargeTockens, PendingRequest, Laboratory, Client } from '../index'
+import { BasicServices, SpecialServices, RechargeTockens, PendingRequest, Laboratory, Client, History } from '../index'
 
 const MenuAdmin = (props) => {
     const { children, value, index, ...other } = props;
@@ -56,7 +56,8 @@ export default function VerticalTabs(hooks) {
                 <Tab label="Special Services" {...a11yProps(2)} />
                 <Tab label="Clients" {...a11yProps(3)} />
                 <Tab label="Laboratory" {...a11yProps(4)} />
-                <Tab label="Recharge Tockens" {...a11yProps(5)} />
+                <Tab label="History transactions" {...a11yProps(5)} />
+                <Tab label="Recharge Tockens" {...a11yProps(6)} />
             </Tabs>
 
             <MenuAdmin value={value} index={0}>
@@ -75,6 +76,9 @@ export default function VerticalTabs(hooks) {
                 < Laboratory {...hooks} name={'Laboratory'} />
             </MenuAdmin>
             <MenuAdmin value={value} index={5}>
+                <History {...hooks} />
+            </MenuAdmin>
+            <MenuAdmin value={value} index={6}>
                 <RechargeTockens {...hooks}  />
             </MenuAdmin>
 

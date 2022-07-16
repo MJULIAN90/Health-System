@@ -51,18 +51,13 @@ contract Client{
         IPrincipalContract.asignSpecialServiceClient(_nameService, owner);
     }
 
-    //Funcion para ver mi historial de servicios
-    // function historyServices()public view returns(string [] memory) {
-    //     return IPrincipalContract.showServicesClient(owner);
-    // }
-
     //Funcion para ver servicios especiales disponibles
     function listSpecialServices() public view returns(string[] memory){
         return IPrincipalContract.showActivedSpecialServices();
     }
 
     //Funcion ver detalles de un servicios especiales
-    function detailsSpecialService(string memory _name) public  view returns(string memory , uint16 , bool){
+    function detailsSpecialService(string memory _name) public  view returns(string memory , uint16 , bool, address){
        return IPrincipalContract.showSpecialServiceDetails(_name);
     }
 }
