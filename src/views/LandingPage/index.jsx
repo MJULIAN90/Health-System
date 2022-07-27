@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
 import { images } from '../../../src/Assets'
 
-const LandingPage = ({ roleUser, getNewLaboratory, getNewUser, getRole, onSumit }) => {
+const LandingPage = ({  getNewLaboratory, getNewUser, getRole, onSumit }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -92,19 +92,19 @@ const LandingPage = ({ roleUser, getNewLaboratory, getNewUser, getRole, onSumit 
                     <Container style={{ position: "relative", height: 630, width: '100%' }}>
                         <Box display={{ justifyContent: "center", display: "flex", alignItems: "center", height: 200 }}>
                             <Typography variant='h3' textTransform='capitalize' textAlign={'center'}>
-                                Do You Want To Be Client ?   
+                                Do You Want To Be client ?   
                             </Typography>
                         </Box>
                         <Box variant="rectangular" width={"100%"} height={400} >
                             <Typography mb={1}>
-                                welcome to the largest network of services, all your data will be safe with us, you can make your payments through our network with which you must acquire tokens for such transactions.
+                                Welcome to the largest network of services, all your data will be safe with us, you can make your payments through our network with which you must acquire tokens for such transactions.
                             </Typography>
                             <Typography marginBottom={5}>
                                 we invite you to purchase our policy and enjoy our benefits.
                             </Typography>
 
                             <Container style={{ justifyContent: "center", display: "flex", marginTop: -30 }} >
-                                <img src={images.iconUser} height={200} width={200} alt='ERROR' />
+                                <img src={images.iconUser} height={200} width={200} alt='ERROR' style={{borderRadius:'50%'}}/>
                             </Container>
 
 

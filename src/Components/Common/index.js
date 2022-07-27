@@ -2,3 +2,8 @@ export { default as InfoClient } from './InfoClient'
 export { default as Service } from './Service';
 export { default as Form } from './Form';
 export { default as CreateService } from './CreateService';
+export { default as TablePaginationScene } from './PaginationScene';
+export { default as TableHeader } from './TableHeader';
+export { default as TableBody } from './TableBody';
+export { default as NoInfo } from './NoInfo';
+export { default as SearchBar } from './SearchBar';
