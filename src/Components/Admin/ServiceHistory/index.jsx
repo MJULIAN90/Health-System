@@ -15,14 +15,23 @@ import { titlesHistoryTransaction } from "../../Common/utils";
 import { NoInfo, SearchBar, TablePaginationScene } from "../../Common";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
-const ServiceHistory = ({ getHistoryTransaction, listServiceHistory }) => {
+const ServiceHistory = (props) => {
+  const {
+    getHistoryTransaction,
+    listServiceHistory,
+    setisSearching,
+    listRenderFilter,
+    isSearching,
+  } = props;
+
   useEffect(() => {
     getHistoryTransaction();
+    setisSearching(false);
   }, []);
 
   return (
     <>
-      <SearchBar />
+      <SearchBar {...props} isHistory />
       <Container>
         {listServiceHistory && listServiceHistory.length > 0 ? (
           <>
@@ -58,29 +67,31 @@ const ServiceHistory = ({ getHistoryTransaction, listServiceHistory }) => {
                   </TableHead>
 
                   <TableBody>
-                    {listServiceHistory.map((element, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell align='center'>{index + 1}</TableCell>
-                          <TableCell align='left'>{element[0]}</TableCell>
-                          <TableCell>{element[1]}</TableCell>
-                          <TableCell align='center'>
-                            {element[2].toUpperCase()}
-                          </TableCell>
-                          <TableCell align='center'>
-                            {element[4].toUpperCase()}
-                          </TableCell>
-                          <TableCell align='center'>
-                            <Box style={{ display: "flex" }}>
-                              <Typography mr={2} ml={3}>
-                                {element[3]}
-                              </Typography>
-                              <RocketLaunchIcon />
-                            </Box>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                    {(isSearching ? listRenderFilter : listServiceHistory).map(
+                      (element, index) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableCell align='center'>{index + 1}</TableCell>
+                            <TableCell align='left'>{element[0]}</TableCell>
+                            <TableCell>{element[1]}</TableCell>
+                            <TableCell align='center'>
+                              {element[2].toUpperCase()}
+                            </TableCell>
+                            <TableCell align='center'>
+                              {element[4].toUpperCase()}
+                            </TableCell>
+                            <TableCell align='center'>
+                              <Box style={{ display: "flex" }}>
+                                <Typography mr={2} ml={3}>
+                                  {element[3]}
+                                </Typography>
+                                <RocketLaunchIcon />
+                              </Box>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -88,19 +99,6 @@ const ServiceHistory = ({ getHistoryTransaction, listServiceHistory }) => {
             <TablePaginationScene listItems={listServiceHistory} />
           </>
         ) : (
-          // listServiceHistory.map(element => {
-
-          //   return(
-          //     <>
-          //       <Typography >Laboratory {element[0]} </Typography>
-          //       <Typography >Client {element[1]} </Typography>
-          //       <Typography >Type service {element[2]} </Typography>
-          //       <Typography >Name service {element[4]} </Typography>
-          //       <Typography >Price {element[3]} </Typography>
-          //     </>
-          //   )
-          // })
-
           <NoInfo
             titlesList={titlesHistoryTransaction}
             message={"Not basic services available"}

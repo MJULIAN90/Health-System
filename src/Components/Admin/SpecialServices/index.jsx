@@ -15,14 +15,23 @@ import {
 } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
-const SpecialServices = ({ listSpecialServices, getSpecialServices }) => {
+const SpecialServices = (props) => {
+  const {
+    listSpecialServices,
+    getSpecialServices,
+    setisSearching,
+    listRenderFilter,
+    isSearching,
+  } = props;
+
   useEffect(() => {
     getSpecialServices();
+    setisSearching(false);
   }, []);
 
   return (
     <>
-      <SearchBar />
+      <SearchBar {...props} isName />
       <Container>
         {listSpecialServices.length === 0 ? (
           <Box>
@@ -67,28 +76,30 @@ const SpecialServices = ({ listSpecialServices, getSpecialServices }) => {
                   </TableHead>
 
                   <TableBody>
-                    {listSpecialServices.map((element, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell align='center'>{index + 1}</TableCell>
-                          <TableCell align='left'>
-                            {element[0].toUpperCase()}
-                          </TableCell>
-                          <TableCell>{element[3]}</TableCell>
-                          <TableCell align='center'>
-                            <Box style={{ display: "flex" }}>
-                              <Typography mr={2} ml={3}>
-                                {element[1]}
-                              </Typography>
-                              <RocketLaunchIcon />
-                            </Box>{" "}
-                          </TableCell>
-                          <TableCell align='center'>
-                            {element[2] ? "✅" : "❌"}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                    {(isSearching ? listRenderFilter : listSpecialServices).map(
+                      (element, index) => {
+                        return (
+                          <TableRow key={index}>
+                            <TableCell align='center'>{index + 1}</TableCell>
+                            <TableCell align='left'>
+                              {element[0].toUpperCase()}
+                            </TableCell>
+                            <TableCell>{element[3]}</TableCell>
+                            <TableCell align='center'>
+                              <Box style={{ display: "flex" }}>
+                                <Typography mr={2} ml={3}>
+                                  {element[1]}
+                                </Typography>
+                                <RocketLaunchIcon />
+                              </Box>{" "}
+                            </TableCell>
+                            <TableCell align='center'>
+                              {element[2] ? "✅" : "❌"}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

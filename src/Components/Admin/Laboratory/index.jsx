@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react'
-import { InfoClient } from '../../Common'
+import React, { useEffect } from "react";
+import { InfoClient } from "../../Common";
 
-const Laboratory = ({ listLaboratories, getLaboratories, onBanUser, onUnBanUser }) => {
+const Laboratory = (props) => {
+  const { listLaboratories, getLaboratories, setisSearching } = props;
 
-    useEffect(() => {
-        getLaboratories()
-    }, [])
-    
-    return (
-        <InfoClient name={'Laboratory'} list={listLaboratories} banUser={onBanUser} unBanUser={onUnBanUser} />
-    )
-}
+  useEffect(() => {
+    getLaboratories();
+    setisSearching(false);
+  }, []);
 
-export default Laboratory
+  return <InfoClient name={"Laboratory"} list={listLaboratories} {...props} />;
+};
+
+export default Laboratory;

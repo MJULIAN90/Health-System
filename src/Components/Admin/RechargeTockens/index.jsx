@@ -1,10 +1,8 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { Form } from "../../Common";
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
 import { images } from "../../../Assets";
 
 const RechargeTockens = ({ getRechargeTokens }) => {
@@ -46,7 +44,7 @@ const RechargeTockens = ({ getRechargeTokens }) => {
           minHeight: 400,
           right: 50,
           position: "absolute",
-          zIndex:2,
+          zIndex: 2,
           opacity: 0.95,
         }}
       >

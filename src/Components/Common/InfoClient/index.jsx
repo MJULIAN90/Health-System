@@ -1,6 +1,5 @@
 import {
   Container,
-  List,
   Box,
   Button,
   Paper,
@@ -11,7 +10,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Grid,
 } from "@mui/material";
 import React from "react";
 import { handleStatusContract } from "../../../utils";
@@ -21,12 +19,22 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import TablePaginationScene from "../PaginationScene";
 import SearchBar from "../SearchBar";
 
-const InfoClient = ({ name, list, unBanUser, banUser }) => {
+const InfoClient = (props) => {
+  const {
+    name,
+    list,
+    unBanUser,
+    onBanUser,
+    onUnBanUser,
+    isSearching,
+    listRenderFilter,
+  } = props;
+
   const nullContract = "0x0000000000000000000000000000000000000000";
 
   return (
     <>
-      <SearchBar />
+      <SearchBar {...props} isWallet />
       <Container>
         <Box>
           {list.length === 0 ? (
@@ -72,142 +80,86 @@ const InfoClient = ({ name, list, unBanUser, banUser }) => {
                     </TableHead>
 
                     <TableBody>
-                      {list.map((service, index) => {
-                        const {
-                          wallet,
-                          addresContract,
-                          status,
-                          statusContract,
-                          BalanceUser,
-                        } = service;
-                        return (
-                          <TableRow key={index}>
-                            <TableCell align='center'>{index + 1}</TableCell>
-                            <TableCell align='left'> {wallet} </TableCell>
-                            <TableCell>
-                              {addresContract !== nullContract
-                                ? `${addresContract.toUpperCase()}`
-                                : "⌛"}
-                            </TableCell>
-                            <TableCell align='left'>
-                              {" "}
-                              {statusContract.toUpperCase()}{" "}
-                            </TableCell>
-                            <TableCell align='center'>
-                              <Box style={{ display: "flex" }}>
-                                <Typography mr={2} ml={3}>
-                                  {BalanceUser}
-                                </Typography>
-                                <RocketLaunchIcon />
-                              </Box>
-                            </TableCell>
+                      {(isSearching ? listRenderFilter : list).map(
+                        (service, index) => {
+                          const {
+                            wallet,
+                            addresContract,
+                            statusContract,
+                            BalanceUser,
+                          } = service;
+                          return (
+                            <TableRow key={index}>
+                              <TableCell align='center'>{index + 1}</TableCell>
+                              <TableCell align='left'> {wallet} </TableCell>
+                              <TableCell>
+                                {addresContract !== nullContract
+                                  ? `${addresContract.toUpperCase()}`
+                                  : "⌛"}
+                              </TableCell>
+                              <TableCell align='left'>
+                                {statusContract.toUpperCase()}
+                              </TableCell>
+                              <TableCell align='center'>
+                                <Box style={{ display: "flex" }}>
+                                  <Typography mr={2} ml={3}>
+                                    {BalanceUser}
+                                  </Typography>
+                                  <RocketLaunchIcon />
+                                </Box>
+                              </TableCell>
 
-                            <TableCell align='center'>
-                              <Button
-                                onClick={() => {
-                                  banUser(wallet);
-                                }}
-                                disabled={handleStatusContract(
-                                  statusContract,
-                                  "block"
-                                )}
-                              >
-                                🚫
-                              </Button>
-                            </TableCell>
+                              <TableCell align='center'>
+                                <Button
+                                  onClick={() => {
+                                    onBanUser(wallet);
+                                  }}
+                                  disabled={handleStatusContract(
+                                    statusContract,
+                                    "block"
+                                  )}
+                                >
+                                  🚫
+                                </Button>
+                              </TableCell>
 
-                            <TableCell align='center'>
-                              <Button
-                                onClick={() => {
-                                  unBanUser(wallet);
-                                }}
-                                disabled={handleStatusContract(
-                                  statusContract,
-                                  "unblock"
-                                )}
-                              >
-                                🚀
-                              </Button>
-                            </TableCell>
+                              <TableCell align='center'>
+                                <Button
+                                  onClick={() => {
+                                    onUnBanUser(wallet);
+                                  }}
+                                  disabled={handleStatusContract(
+                                    statusContract,
+                                    "unblock"
+                                  )}
+                                >
+                                  🚀
+                                </Button>
+                              </TableCell>
 
-                            <TableCell align='center'>
-                              <Button
-                                onClick={() => {
-                                  unBanUser(wallet);
-                                }}
-                                disabled={handleStatusContract(
-                                  statusContract,
-                                  "active"
-                                )}
-                              >
-                                ✅
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
+                              <TableCell align='center'>
+                                <Button
+                                  onClick={() => {
+                                    unBanUser(wallet);
+                                  }}
+                                  disabled={handleStatusContract(
+                                    statusContract,
+                                    "active"
+                                  )}
+                                >
+                                  ✅
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Paper>
               <TablePaginationScene listItems={list} />
             </>
-
-            //   <List>
-            //     {list.map((service) => {
-            //       const {
-            //         wallet,
-            //         addresContract,
-            //         status,
-            //         statusContract,
-            //         BalanceUser,
-            //       } = service;
-
-            //       return (
-            //         <>
-            //           <ul key={wallet}>
-            //             <li> Address: {wallet} </li>
-            //             <li>
-            //               {" "}
-            //               {addresContract !== nullContract
-            //                 ? `Number contract: ${addresContract.toUpperCase()}`
-            //                 : "Number contract: NO AVAILABLE"}{" "}
-            //             </li>
-            //             <li> Account status: {status ? "ACTIVE" : "INACTIVE"}</li>
-            //             <li> Status contract: {statusContract.toUpperCase()}</li>
-            //             <li> Balance contract: {BalanceUser} tockens</li>
-            //           </ul>
-            //           <Button
-            //             onClick={() => {
-            //               banUser(wallet);
-            //             }}
-            //             disabled={handleStatusContract(statusContract, "block")}
-            //           >
-            //             {" "}
-            //             Block contract{" "}
-            //           </Button>
-            //           <Button
-            //             onClick={() => {
-            //               unBanUser(wallet);
-            //             }}
-            //             disabled={handleStatusContract(statusContract, "unblock")}
-            //           >
-            //             {" "}
-            //             Unblock contract{" "}
-            //           </Button>
-            //           <Button
-            //             onClick={() => {
-            //               unBanUser(wallet);
-            //             }}
-            //             disabled={handleStatusContract(statusContract, "active")}
-            //           >
-            //             {" "}
-            //             Active contract{" "}
-            //           </Button>
-            //         </>
-            //       );
-            //     })}
-            //   </List>
           )}
         </Box>
       </Container>

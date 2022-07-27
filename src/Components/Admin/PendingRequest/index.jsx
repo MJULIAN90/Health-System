@@ -4,7 +4,7 @@ import { AppBar, Tabs, Tab, Typography, Box } from "@mui/material";
 import ListRequest from "./components/ListRequest";
 import { SearchBar } from "../../Common";
 
-function TabPanel(props) {
+const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -22,14 +22,14 @@ function TabPanel(props) {
       )}
     </div>
   );
-}
+};
 
-function a11yProps(index) {
+const propTabs = (index) => {
   return {
     id: `full-width-tab-${index}`,
     "aria-controls": `full-width-tabpanel-${index}`,
   };
-}
+};
 
 const PendingRequest = (props) => {
   const theme = useTheme();
@@ -42,7 +42,7 @@ const PendingRequest = (props) => {
   return (
     <Box sx={{ bgcolor: "background.paper", width: "100%" }}>
       <SearchBar />
-      <AppBar position='static' style={{marginTop:20}}>
+      <AppBar position='static' style={{ marginTop: 20 }}>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -51,8 +51,8 @@ const PendingRequest = (props) => {
           variant='fullWidth'
           aria-label='full width tabs example'
         >
-          <Tab label='Clients' {...a11yProps(0)} />
-          <Tab label='Partners' {...a11yProps(1)} />
+          <Tab label='Clients' {...propTabs(0)} />
+          <Tab label='Partners' {...propTabs(1)} />
         </Tabs>
       </AppBar>
       <Box>

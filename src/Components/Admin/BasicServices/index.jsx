@@ -29,11 +29,12 @@ const BasicServices = (props) => {
     getCreateService,
     listRenderFilter,
     isSearching,
-    setListRenderFilter,
+    setisSearching,
   } = props;
 
   useEffect(() => {
     getBasicServices();
+    setisSearching(false);
   }, []);
 
   const onPressChangeStatus = (name) => {
@@ -42,7 +43,7 @@ const BasicServices = (props) => {
 
   return (
     <>
-      <SearchBar {...props} name list={listBasicServices} />
+      <SearchBar {...props} isName />
       <Container>
         <Grid container xs={12} mt={1}>
           <Grid item xs={10}>
@@ -91,8 +92,8 @@ const BasicServices = (props) => {
                     </TableHead>
 
                     <TableBody>
-                      {isSearching &&
-                        listRenderFilter.map((service, index) => {
+                      {(isSearching ? listRenderFilter : listBasicServices).map(
+                        (service, index) => {
                           return (
                             <Service
                               service={service}
@@ -101,19 +102,8 @@ const BasicServices = (props) => {
                               index={index}
                             />
                           );
-                        })}
-
-                      {!isSearching &&
-                        listBasicServices.map((service, index) => {
-                          return (
-                            <Service
-                              service={service}
-                              typeService
-                              onPressChangeStatus={onPressChangeStatus}
-                              index={index}
-                            />
-                          );
-                        })}
+                        }
+                      )}
                     </TableBody>
                   </Table>
                 </TableContainer>

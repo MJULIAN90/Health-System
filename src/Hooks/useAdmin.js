@@ -13,9 +13,9 @@ const useAdmin = (props) => {
   const [listClients, setlistClients] = useState([]);
   const [listLaboratories, setlistLaboratories] = useState([]);
   const [listServiceHistory, setListServiceHistory] = useState([]);
-
   const [listRenderFilter, setListRenderFilter] = useState([]);
   const [isSearching, setisSearching] = useState(false);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     getBalanceContract();
@@ -243,6 +243,7 @@ const useAdmin = (props) => {
   };
 
   return {
+    setData,
     onBanUser,
     onUnBanUser,
     getPendintRequest,
@@ -267,6 +268,7 @@ const useAdmin = (props) => {
     listServiceHistory,
     listRenderFilter,
     isSearching,
+    data,
   };
 };
 
