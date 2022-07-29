@@ -17,7 +17,7 @@ const NoInfo = ({ titlesList, message, sceneMessage, isHeader = false }) => {
       {isHeader && (
         <Typography
           style={{
-            backgroundColor: "#009BE5",
+            backgroundColor: "#006db9",
             height: 38,
             borderRadius: 8,
             display: "flex",

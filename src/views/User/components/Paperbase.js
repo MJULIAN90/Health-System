@@ -10,13 +10,12 @@ import { useState } from "react";
 import Footer from "../../Footer";
 import { theme } from "../../../utils";
 
-
 const drawerWidth = 256;
 
 const Container = (hooks) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
-  const [sceneActive, setSceneActive] = useState("pending_request");
+  const [sceneActive, setSceneActive] = useState("buy_tokens");
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

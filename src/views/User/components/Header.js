@@ -17,7 +17,7 @@ import { images } from "../../../Assets";
 const lightColor = "rgba(255, 255, 255, 0.7)";
 
 const Header = (props) => {
-  const { onDrawerToggle, balanceContract, balanceEthersContract } = props;
+  const { onDrawerToggle, balanceEthers, balanceClient } = props;
 
   return (
     <React.Fragment>
@@ -76,20 +76,17 @@ const Header = (props) => {
           <Grid container alignItems='center' spacing={1}>
             <Grid item xs>
               <Typography color='inherit' variant='h5' component='h1'>
-                Welcome Admin
+                Welcome
               </Typography>
             </Grid>
+
             <Grid>
               <Grid item>
                 <Typography color='inherit'>
-                  Tockens contract: {balanceContract} 🚀
+                  Tockens : {balanceClient} 🚀
                 </Typography>
               </Grid>
-              <Grid item>
-                <Typography color='inherit'>
-                  Balance contract: {balanceEthersContract} ETH
-                </Typography>
-              </Grid>
+
             </Grid>
           </Grid>
         </Toolbar>

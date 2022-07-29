@@ -42,3 +42,19 @@ export const titlesHistoryTransaction = [
   { title: "Name service ", position: "center" },
   { title: "Price", position: "center" },
 ];
+
+export const titlesHistoryTransactionUser = [
+  { title: "Index", position: "left" },
+  { title: "Laboratory", position: "left" },
+  { title: "Type service", position: "left" },
+  { title: "Name service ", position: "center" },
+  { title: "Price", position: "center" },
+];
+
+export const titlesServicesUser = [
+  { title: "Index", position: "left" },
+  { title: "Name service", position: "left" },
+  { title: "Price", position: "center" },
+  { title: "Status service ", position: "center" },
+  { title: "Buy service", position: "center" },
+];

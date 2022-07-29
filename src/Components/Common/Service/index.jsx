@@ -38,54 +38,34 @@ const Service = ({
       </TableCell>
 
       <TableCell align='center'>{service[2] ? "✅" : "❌"}</TableCell>
-      <TableCell align='right'>
-        {typeService && (
+
+      {typeService && (
+        <TableCell align='right'>
           <Button onClick={onchangeStatus} disabled={!service[2]}>
             <CheckCircleRoundedIcon />
           </Button>
-        )}
-      </TableCell>
-      <TableCell align='right'>
-        {typeService && (
+        </TableCell>
+      )}
+      {typeService && (
+        <TableCell align='right'>
           <Button onClick={onchangeStatus} disabled={service[2]}>
             <RemoveCircleRoundedIcon />
           </Button>
-        )}
-      </TableCell>
+        </TableCell>
+      )}
 
-      <TableCell align='right'>
-        {isBuyService && (
-          <Button onClick={handleBuyService} disabled={!service[2]}>
+      {isBuyService && (
+        <TableCell align='center'>
+          <Button
+            onClick={handleBuyService}
+            disabled={!service[2]}
+            variant='contained'
+          >
             Buy Service
           </Button>
-        )}
-      </TableCell>
+        </TableCell>
+      )}
     </TableRow>
-
-    // <Typography > {service[0]} </Typography>
-    // <Typography > {service[1]} </Typography>
-    // <Typography > {service[2] ? 'Activo' : 'Inactive'} </Typography>
-
-    // {
-    //     typeService &&
-    //         <Button onClick={onchangeStatus} disabled={!service[2]}>
-    //             deactivate
-    //         </Button>
-    // }
-
-    // {
-    //     typeService &&
-    //         <Button onClick={onchangeStatus} disabled={service[2]}>
-    //             activate
-    //         </Button>
-    // }
-
-    // {
-    //     isBuyService &&
-    //     <Button onClick={handleBuyService} disabled={!service[2]}>
-    //         Buy Service
-    //     </Button>
-    // }
   );
 };
 

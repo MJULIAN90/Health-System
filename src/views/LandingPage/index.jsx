@@ -229,7 +229,7 @@ const LandingPage = ({ getNewLaboratory, getNewUser, getRole, onSumit }) => {
           height={215}
           width={"100%"}
           alt='ERROR'
-          style={{ position: "absolute", bottom: 0 }}
+          style={{ position: "absolute", bottom: 0, zIndex:-1 }}
         />
       </Grid>
     </Container>

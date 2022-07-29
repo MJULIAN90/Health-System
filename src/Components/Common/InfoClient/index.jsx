@@ -23,7 +23,6 @@ const InfoClient = (props) => {
   const {
     name,
     list,
-    unBanUser,
     onBanUser,
     onUnBanUser,
     isSearching,
@@ -140,7 +139,7 @@ const InfoClient = (props) => {
                               <TableCell align='center'>
                                 <Button
                                   onClick={() => {
-                                    unBanUser(wallet);
+                                    onUnBanUser(wallet);
                                   }}
                                   disabled={handleStatusContract(
                                     statusContract,

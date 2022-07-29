@@ -79,17 +79,15 @@ const Header = (props) => {
                 Welcome Admin
               </Typography>
             </Grid>
-            <Grid>
-              <Grid item>
-                <Typography color='inherit'>
-                  Tockens contract: {balanceContract} 🚀
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography color='inherit'>
-                  Balance contract: {balanceEthersContract} ETH
-                </Typography>
-              </Grid>
+            <Grid item>
+              <Typography color='inherit'>
+                Tockens contract: {balanceContract}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Typography color='inherit'>
+                Balance contract: {balanceEthersContract} ETH
+              </Typography>
             </Grid>
           </Grid>
         </Toolbar>

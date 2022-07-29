@@ -46,7 +46,7 @@ const SpecialServices = (props) => {
           <>
             <Typography
               style={{
-                backgroundColor: "#006DB9",
+                backgroundColor: "#006db9",
                 height: 38,
                 borderRadius: 8,
                 display: "flex",
@@ -57,7 +57,7 @@ const SpecialServices = (props) => {
                 marginBottom: 10,
               }}
             >
-              Special Services
+              Special Servicesgf
             </Typography>
             <Paper>
               <TableContainer component={Paper} style={{ height: 400 }}>
