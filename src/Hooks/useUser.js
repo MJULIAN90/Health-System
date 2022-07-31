@@ -87,8 +87,9 @@ const useUser = (props) => {
     if (numberContract !== 0) {
       try {
         const response = await instanceContractClient.listServices().call();
+        let data = await response.filter((name) => name != "");
         const responseDetails = await Promise.all(
-          response.map(
+          data.map(
             async (name) =>
               await instanceContractClient.detailsService(name).call()
           )
@@ -109,8 +110,10 @@ const useUser = (props) => {
         const response = await instanceContractClient
           .listSpecialServices()
           .call();
+        let data = await response.filter((name) => name != "");
+
         const responseSpecialDetails = await Promise.all(
-          response.map(
+          data.map(
             async (name) =>
               await instanceContractClient.detailsSpecialService(name).call()
           )
@@ -165,8 +168,10 @@ const useUser = (props) => {
   };
 
   const getUseBasicService = async (nameService, price) => {
-    if (price > balanceClient)
+    console.log("name service", nameService);
+    if (Number(price) > Number(balanceClient)) {
       return alertMessage("Insufficient balance", "info");
+    }
 
     try {
       await instanceContractClient
@@ -184,7 +189,7 @@ const useUser = (props) => {
   };
 
   const getUseSpecialService = async (nameService, price) => {
-    if (price > balanceClient)
+    if (Number(price) > Number(balanceClient))
       return alertMessage("Insufficient balance", "info");
 
     try {

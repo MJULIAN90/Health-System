@@ -11,8 +11,8 @@ export const titlesService = [
   { title: "Name service", position: "left" },
   { title: "Price service", position: "left" },
   { title: "Status", position: "center" },
-  { title: "Deactivate", position: "right" },
   { title: "Activate", position: "right" },
+  { title: "Deactivate", position: "right" },
 ];
 
 export const titlesListSpecialService = [
@@ -61,7 +61,7 @@ export const titlesServicesUser = [
 
 export const titlesHistoryUsers = [
   { title: "Index", position: "left" },
-  { title: "Client", position: "left" },
+  { title: "Client", position: "center" },
   { title: "Name service", position: "center" },
   { title: "Price ", position: "center" },
 ];

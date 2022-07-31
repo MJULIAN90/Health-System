@@ -1,17 +1,15 @@
 import { Box, Button, TableCell, TableRow, Typography } from "@mui/material";
 import React from "react";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
-import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
-
-const Service = ({
-  service,
-  onPressChangeStatus = () => {},
-  typeService = false,
-  isBuyService = false,
-  onBuyService,
-  index,
-}) => {
+const Service = (props) => {
+  const {
+    service,
+    onPressChangeStatus = () => {},
+    typeService,
+    isBuyService,
+    onBuyService,
+    index,
+  } = props;
   const onchangeStatus = () => {
     onPressChangeStatus(service[0]);
   };
@@ -41,15 +39,15 @@ const Service = ({
 
       {typeService && (
         <TableCell align='right'>
-          <Button onClick={onchangeStatus} disabled={!service[2]}>
-            <CheckCircleRoundedIcon />
+          <Button onClick={onchangeStatus} disabled={service[2]}>
+            🚀
           </Button>
         </TableCell>
       )}
       {typeService && (
         <TableCell align='right'>
-          <Button onClick={onchangeStatus} disabled={service[2]}>
-            <RemoveCircleRoundedIcon />
+          <Button onClick={onchangeStatus} disabled={!service[2]}>
+            ⛔
           </Button>
         </TableCell>
       )}

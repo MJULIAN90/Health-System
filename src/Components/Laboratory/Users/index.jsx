@@ -31,7 +31,7 @@ const Users = (props) => {
 
   return (
     <>
-      <SearchBar {...props} isName />
+      <SearchBar {...props} isUserHistory />
       <Container>
         <Grid container xs={12} mt={1}>
           <Grid item xs={12}>

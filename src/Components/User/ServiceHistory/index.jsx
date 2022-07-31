@@ -21,9 +21,11 @@ const ServiceHistory = (props) => {
     getServiceHistory,
     listRenderFilter,
     isSearching,
+    setisSearching,
   } = props;
   useEffect(() => {
     getServiceHistory();
+    setisSearching(false);
   }, []);
 
   return (

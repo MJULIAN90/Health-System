@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 const TablePaginationScene = ({listItems}) => {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -16,7 +16,7 @@ const TablePaginationScene = ({listItems}) => {
 
     return (
         <TablePagination
-            rowsPerPageOptions={[5, 10, 50]}
+            rowsPerPageOptions={[10, 50]}
             component="div"
             count={listItems.length}
             rowsPerPage={rowsPerPage}

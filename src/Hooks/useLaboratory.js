@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const useLaboratory = (props) => {
   const { alertMessage } = useAlerts();
   const navigate = useNavigate();
-  const { instanceContract, account, useWeb3 } = props;
+  const { instanceContract, account, useWeb3, getBalanceEth } = props;
   const [specialServiceList, setSpecialServiceList] = useState([]);
   const [numberContract, setnumberContract] = useState(0);
   const [statusContractClient, setStatusContractClient] = useState(false);
@@ -26,8 +26,7 @@ const useLaboratory = (props) => {
 
   useEffect(() => {
     numberContract !== 0 && getBalanceLaboratory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [numberContract]);
 
   const getActiveContract = async () => {
     try {
@@ -104,6 +103,7 @@ const useLaboratory = (props) => {
 
       alertMessage(`successful retirement by ${quantity} tockens `, "success");
       getBalanceLaboratory();
+      getBalanceEth()
     } catch (error) {
       alertMessage("Error in transaction insufficient balance");
     }

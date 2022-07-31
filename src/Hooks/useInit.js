@@ -97,7 +97,7 @@ const useInit = () => {
   const getBalanceContractEthers = async () => {
     try {
       const response = await instanceContract.BalanceContractEthers().call();
-      setBalanceEthersContract(response / 1000000000);
+      setBalanceEthersContract(useWeb3.utils.fromWei(response, "ether"));
     } catch (error) {
       alertMessage("Error in your request balance");
     }
@@ -143,6 +143,7 @@ const useInit = () => {
     roleUser,
     balanceEthers,
     balanceEthersContract,
+    getBalanceEth,
     getRole,
     getNewUser,
     getNewLaboratory,

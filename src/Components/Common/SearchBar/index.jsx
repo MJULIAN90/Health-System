@@ -45,7 +45,7 @@ const SearchBar = (props) => {
 
     if (isUserHistory) {
       const dataFilter = data.filter((item) =>
-        item[4].toLowerCase().includes(e.target.value.toLowerCase())
+        item[1].toLowerCase().includes(e.target.value.toLowerCase())
       );
       setisSearching(true);
       setListRenderFilter(dataFilter);
@@ -64,9 +64,9 @@ const SearchBar = (props) => {
               onChange={handleOnChange}
               fullWidth
               placeholder={
-                isName || isUserHistory
+                isName
                   ? "Search by name service"
-                  : isWallet
+                  : isWallet || isUserHistory
                   ? "Search by address wallet"
                   : "Search by address wallet laboratory"
               }

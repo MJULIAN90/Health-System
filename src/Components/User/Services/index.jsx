@@ -49,7 +49,7 @@ const Services = (props) => {
 
   return (
     <Box sx={{ bgcolor: "background.paper", width: 1000 }}>
-      <SearchBar />
+      <SearchBar {...props} isName />
       <AppBar position='static' style={{ marginTop: 20 }}>
         <Tabs
           value={value}

@@ -56,7 +56,7 @@ const ListService = (props) => {
                           service={service}
                           isBuyService
                           onBuyService={onBuyService}
-                          key={index}
+                          index={index}
                         />
                       );
                     })}

@@ -15,16 +15,14 @@ const CancelContract = (props) => {
         display: "flex",
         height: "100%",
         width: "100%",
-        display: "flex",
         justifyContent: "space-around",
         alignContent: "center",
-        backgroundColor: "lightgray",
+        backgroundColor: "white",
       }}
     >
       <Box
         style={{
-          border: "1px solid black",
-          // borderRadius:50,
+          // border: "1px solid black",
           margin: 30,
           height: "90%",
           width: "40%",
@@ -36,11 +34,11 @@ const CancelContract = (props) => {
       >
         <img
           src={images.signContract}
-          height={"85.2%"}
+          height={"70%"}
           width={"100%"}
           alt='ERROR'
           style={{
-            // borderRadius: 50,
+            borderRadius: 20,
             filter: statusContract === "active" && "grayscale(90%)",
           }}
         />
@@ -65,7 +63,6 @@ const CancelContract = (props) => {
       <Box
         style={{
           margin: 30,
-
           height: "90%",
           width: "40%",
           display: "flex",
