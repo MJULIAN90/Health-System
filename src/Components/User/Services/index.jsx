@@ -31,14 +31,15 @@ function a11yProps(index) {
   };
 }
 
-const Services = ({
-  listBasicService,
-  listSpecialService,
-  getListBasicServices,
-  getListSpecialServices,
-  getUseBasicService,
-  getUseSpecialService,
-}) => {
+const Services = (props) => {
+  const {
+    listBasicService,
+    listSpecialService,
+    getListBasicServices,
+    getListSpecialServices,
+    getUseBasicService,
+    getUseSpecialService,
+  } = props;
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -69,6 +70,7 @@ const Services = ({
             method={getListBasicServices}
             onBuyService={getUseBasicService}
             type={"basic"}
+            {...props}
           />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
@@ -77,6 +79,7 @@ const Services = ({
             method={getListSpecialServices}
             onBuyService={getUseSpecialService}
             type={"special"}
+            {...props}
           />
         </TabPanel>
       </Box>

@@ -17,7 +17,7 @@ const Service = ({
   };
 
   const handleBuyService = () => {
-    onBuyService(service[0]);
+    onBuyService(service[0], service[1]);
   };
 
   return (

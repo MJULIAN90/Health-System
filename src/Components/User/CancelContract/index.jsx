@@ -8,20 +8,26 @@ const CancelContract = (props) => {
     getActiveContract,
     roleUser: { statusContract },
   } = props;
-  
+
   return (
     <Box
       style={{
         display: "flex",
         height: "100%",
         width: "100%",
-        justifyContent: "space-between",
+        display: "flex",
+        justifyContent: "space-around",
+        alignContent: "center",
+        backgroundColor: "lightgray",
       }}
     >
       <Box
         style={{
-          height: "100%",
-          width: "49%",
+          border: "1px solid black",
+          // borderRadius:50,
+          margin: 30,
+          height: "90%",
+          width: "40%",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
@@ -30,10 +36,13 @@ const CancelContract = (props) => {
       >
         <img
           src={images.signContract}
-          height={"70%"}
+          height={"85.2%"}
           width={"100%"}
           alt='ERROR'
-          style={{ borderRadius: 20 }}
+          style={{
+            // borderRadius: 50,
+            filter: statusContract === "active" && "grayscale(90%)",
+          }}
         />
         <Button
           onClick={getActiveContract}
@@ -55,13 +64,14 @@ const CancelContract = (props) => {
 
       <Box
         style={{
-          height: "100%",
-          width: "49%",
-          justifyContent: "center",
+          margin: 30,
+
+          height: "90%",
+          width: "40%",
           display: "flex",
-          alignItems: "center",
           flexDirection: "column",
           position: "relative",
+          borderRadius: 20,
         }}
       >
         <img
@@ -69,7 +79,10 @@ const CancelContract = (props) => {
           height={"70%"}
           width={"100%"}
           alt='ERROR'
-          style={{ borderRadius: 20 }}
+          style={{
+            borderRadius: 50,
+            filter: statusContract === "acepted" && "grayscale(90%)",
+          }}
         />
         <Button
           onClick={cancelContract}

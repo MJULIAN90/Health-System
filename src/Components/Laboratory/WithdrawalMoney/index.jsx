@@ -1,11 +1,8 @@
-import { Button } from "@mui/material";
 import React from "react";
-import { Form } from "../../Common";
+import { ContainerCard } from "../../Common";
 
 const WithdrawalMoney = ({ withdrawalMoney }) => {
-  return (
-    <Form method={withdrawalMoney} textButton="Witdrawal"/>
-  );
+  return <ContainerCard action={withdrawalMoney} title={"Witdrawal"} />;
 };
 
 export default WithdrawalMoney;

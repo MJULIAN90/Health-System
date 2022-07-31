@@ -118,7 +118,7 @@ contract InsuranceRocketCompany is InterfaceRocket{
 
     //Funcion para convertir el precio de tokens a ethers
     function tokenToGwei(uint _quantity) private pure returns(uint){
-        return _quantity * (1 gwei);
+        return _quantity * (1 ether);
     } 
 
     //Funcion para comprar tokens

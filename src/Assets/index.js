@@ -9,6 +9,8 @@ import card from "./images/card.png";
 import coin from "./images/coin.png";
 import cancelContract from "./images/cancelContract.png";
 import signContract from "./images/signContract.png";
+import cancelLaboratory from "./images/cancelLaboratory.jpg";
+import logoBack from "./images/logo2.png";
 
 export const images = {
   logoBlack,
@@ -22,4 +24,6 @@ export const images = {
   coin,
   cancelContract,
   signContract,
+  cancelLaboratory,
+  logoBack,
 };

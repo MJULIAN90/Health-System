@@ -58,3 +58,10 @@ export const titlesServicesUser = [
   { title: "Status service ", position: "center" },
   { title: "Buy service", position: "center" },
 ];
+
+export const titlesHistoryUsers = [
+  { title: "Index", position: "left" },
+  { title: "Client", position: "left" },
+  { title: "Name service", position: "center" },
+  { title: "Price ", position: "center" },
+];

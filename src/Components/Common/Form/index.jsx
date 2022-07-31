@@ -1,22 +1,13 @@
 import React, { useState } from "react";
-import {
-  Container,
-  FormControl,
-  InputLabel,
-  Input,
-  Button,
-  Grid,
-  Typography,
-  TextField,
-} from "@mui/material";
+import { Container, FormControl, Button, Grid, TextField } from "@mui/material";
 import useAlerts from "../../../Hooks/useAlerts";
 
 const Form = ({
   textButton,
   method,
-  isName = false,
+  isName,
   modalClose = () => {},
-  isDisable = false,
+  isDisable,
 }) => {
   const [quantity, setQuantity] = useState(0);
   const [name, setName] = useState("");
@@ -66,7 +57,7 @@ const Form = ({
             />
           </Grid>
 
-          <Grid item style={{ width: "100%", height: 30, marginTop:20 }}>
+          <Grid item style={{ width: "100%", height: 30, marginTop: 20 }}>
             <Button
               variant='contained'
               onClick={onSumit}

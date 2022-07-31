@@ -53,7 +53,7 @@ const useUser = (props) => {
         .send({ from: account[0] });
       const messageResponse = response.events.createFactoryEvent.returnValues;
       getCheckNumberContract();
-      getRole()
+      getRole();
       alertMessage(`${messageResponse[0]} # ${messageResponse[1]}`, "success");
     } catch (error) {
       alertMessage("Error creating your contract");
@@ -164,7 +164,10 @@ const useUser = (props) => {
     }
   };
 
-  const getUseBasicService = async (nameService) => {
+  const getUseBasicService = async (nameService, price) => {
+    if (price > balanceClient)
+      return alertMessage("Insufficient balance", "info");
+
     try {
       await instanceContractClient
         .useService(nameService)
@@ -180,7 +183,10 @@ const useUser = (props) => {
     }
   };
 
-  const getUseSpecialService = async (nameService) => {
+  const getUseSpecialService = async (nameService, price) => {
+    if (price > balanceClient)
+      return alertMessage("Insufficient balance", "info");
+
     try {
       await instanceContractClient
         .useSpecialService(nameService)

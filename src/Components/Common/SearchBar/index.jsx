@@ -6,9 +6,10 @@ const SearchBar = (props) => {
   const {
     setListRenderFilter,
     setisSearching,
-    isName = false,
-    isWallet = false,
-    isHistory = false,
+    isName,
+    isWallet,
+    isHistory,
+    isUserHistory,
     data,
   } = props;
 
@@ -41,6 +42,14 @@ const SearchBar = (props) => {
       setisSearching(true);
       setListRenderFilter(dataFilter);
     }
+
+    if (isUserHistory) {
+      const dataFilter = data.filter((item) =>
+        item[4].toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setisSearching(true);
+      setListRenderFilter(dataFilter);
+    }
   };
 
   return (
@@ -55,8 +64,8 @@ const SearchBar = (props) => {
               onChange={handleOnChange}
               fullWidth
               placeholder={
-                isName
-                  ? "Search by name "
+                isName || isUserHistory
+                  ? "Search by name service"
                   : isWallet
                   ? "Search by address wallet"
                   : "Search by address wallet laboratory"

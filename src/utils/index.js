@@ -22,7 +22,6 @@ export const isContractValid = (numberContract, setnumberContract) => {
 };
 
 export const handleStatusContract = (status, name) => {
-  
   if (name === "active") {
     if (status === "active" || status === "banned" || status === "acepted")
       return true;
@@ -37,6 +36,35 @@ export const handleStatusContract = (status, name) => {
     if (status === "banned" || status === "inactive") return true;
   }
 };
+
+export const categoriesLaboratory = [
+  {
+    id: "Welcome",
+    children: [
+      {
+        id: "Laboratory Information",
+        icon: <HourglassBottomRoundedIcon />,
+        scene: "information",
+        active: true,
+      },
+      {
+        id: "My Services",
+        icon: <DnsRoundedIcon />,
+        scene: "services",
+      },
+      {
+        id: "History users",
+        icon: <MedicalServicesRoundedIcon />,
+        scene: "history_users",
+      },
+      {
+        id: "Withdrawal Money",
+        icon: <PeopleIcon />,
+        scene: "withdrawal_money",
+      },
+    ],
+  },
+];
 
 export const categoriesUser = [
   {

@@ -9,14 +9,18 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { NoInfo, Service, TablePaginationScene } from "../../../Common";
 import { titlesServicesUser } from "../../../Common/utils";
 
-const ListService = ({ list, method, onBuyService, type }) => {
+const ListService = (props) => {
+  const { list, method, onBuyService, type, setData } = props;
+
   useEffect(() => {
     method();
   }, []);
+
+  useMemo(() => setData(list), [list]);
 
   return (
     <Container>

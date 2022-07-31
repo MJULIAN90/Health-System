@@ -243,7 +243,6 @@ const useAdmin = (props) => {
   };
 
   return {
-    setData,
     onBanUser,
     onUnBanUser,
     getPendintRequest,
@@ -256,6 +255,7 @@ const useAdmin = (props) => {
     getCreateService,
     getRechargeTokens,
     getHistoryTransaction,
+    setData,
     setListRenderFilter,
     setisSearching,
     balanceContract,

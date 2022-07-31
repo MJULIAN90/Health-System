@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import Footer from "../Footer";
-import Nabvar from "../Navbar";
 import User from "../User";
 import Admin from "../Admin";
 import Laboratory from "../Laboratory";
@@ -34,11 +32,7 @@ const Home = (props) => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Stack spacing={2}>
-        {" "}
-        {Render()}
-        <Footer />
-      </Stack>
+      <Stack spacing={2}> {Render()}</Stack>
     </Box>
   );
 };

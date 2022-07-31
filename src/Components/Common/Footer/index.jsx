@@ -1,15 +1,14 @@
-import React from 'react'
-import { Container, Typography } from '@mui/material';
-
+import React from "react";
+import { Container, Typography } from "@mui/material";
 
 const Footer = () => {
   return (
-    <Container>    
+    <Container style={{ textAlign: "center", marginBottom:20 }}>
       <Typography>© {new Date().getFullYear()} Original designs by </Typography>
       <Typography>Martin Julian Ruiz Velásquez </Typography>
       <Typography>Andrés Felipe Velásquez Trujillo</Typography>
-   </Container>
-  )
-}
+    </Container>
+  );
+};
 
-export default Footer
+export default Footer;

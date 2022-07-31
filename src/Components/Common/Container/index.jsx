@@ -1,22 +1,17 @@
-import * as React from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Navigator from "./Navigator";
-import Content from "./Content";
-import Header from "./Header";
-import { useState } from "react";
-import Footer from "../../Footer";
+import React, { useState } from "react";
+import { ThemeProvider } from "@mui/material/styles";
+import { useMediaQuery, CssBaseline, Box } from "@mui/material";
+import { Navigator, Header, Footer } from "../";
 import { theme } from "../../../utils";
-
+import { Content } from "../";
 
 const drawerWidth = 256;
 
-const Container = (hooks) => {
+const Container = (props) => {
+  const { screenInital } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
-  const [sceneActive, setSceneActive] = useState("pending_request");
+  const [sceneActive, setSceneActive] = useState(screenInital);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -36,7 +31,7 @@ const Container = (hooks) => {
               variant='temporary'
               open={mobileOpen}
               onClose={handleDrawerToggle}
-              {...hooks}
+              {...props}
             />
           )}
 
@@ -44,16 +39,16 @@ const Container = (hooks) => {
             PaperProps={{ style: { width: drawerWidth } }}
             sx={{ display: { sm: "block", xs: "none" } }}
             sceneActive={setSceneActive}
-            {...hooks}
+            {...props}
           />
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          <Header onDrawerToggle={handleDrawerToggle} {...hooks} />
+          <Header onDrawerToggle={handleDrawerToggle} {...props} />
           <Box
             component='main'
             sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
           >
-            <Content {...hooks} scene={sceneActive} />
+            <Content {...props} scene={sceneActive} />
           </Box>
           <Box component='footer' sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Footer />

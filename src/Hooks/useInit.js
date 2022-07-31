@@ -99,7 +99,7 @@ const useInit = () => {
       const response = await instanceContract.BalanceContractEthers().call();
       setBalanceEthersContract(response / 1000000000);
     } catch (error) {
-      console.log(error);
+      alertMessage("Error in your request balance");
     }
   };
 

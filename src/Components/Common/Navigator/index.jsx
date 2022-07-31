@@ -16,7 +16,7 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { categoriesAdmin, item, itemCategory } from "../../../utils";
+import { categoriesUser, item, itemCategory } from "../../../utils";
 
 const Navigator = (props) => {
   const { ...other } = props;
@@ -49,7 +49,7 @@ const Navigator = (props) => {
           </ListItemText>
         </ListItemButton>
 
-        {categoriesAdmin.map(({ id, children }) => (
+        {props.categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
             <ListItem sx={{ py: 3, px: 3 }}>
               <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>

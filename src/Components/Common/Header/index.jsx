@@ -14,10 +14,17 @@ import {
 
 import { images } from "../../../Assets";
 
-const lightColor = "rgba(255, 255, 255, 0.7)";
-
 const Header = (props) => {
-  const { onDrawerToggle, balanceContract, balanceEthersContract } = props;
+  const {
+    onDrawerToggle,
+    balanceContract,
+    balanceEthersContract,
+    isAdmin,
+    isUser,
+    isLaboratory,
+    balanceClient,
+    balanceLaboratory,
+  } = props;
 
   return (
     <React.Fragment>
@@ -41,7 +48,7 @@ const Header = (props) => {
                 variant='body2'
                 sx={{
                   textDecoration: "none",
-                  color: lightColor,
+                  color: "rgba(255, 255, 255, 0.7)",
                   "&:hover": {
                     color: "common.white",
                   },
@@ -72,27 +79,69 @@ const Header = (props) => {
         elevation={0}
         sx={{ zIndex: 0 }}
       >
-        <Toolbar>
-          <Grid container alignItems='center' spacing={1}>
-            <Grid item xs>
-              <Typography color='inherit' variant='h5' component='h1'>
-                Welcome Admin
-              </Typography>
-            </Grid>
-            <Grid>
-              <Grid item>
-                <Typography color='inherit'>
-                  Tockens contract: {balanceContract} 🚀
+        {isAdmin && (
+          <Toolbar>
+            <Grid container alignItems='center' spacing={1}>
+              <Grid item xs>
+                <Typography color='inherit' variant='h5' component='h1'>
+                  Welcome Admin
                 </Typography>
               </Grid>
-              <Grid item>
-                <Typography color='inherit'>
-                  Balance contract: {balanceEthersContract} ETH
-                </Typography>
+              <Grid>
+                <Grid item>
+                  <Typography color='inherit'>
+                    Tockens contract: {balanceContract} 🚀
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography color='inherit'>
+                    Balance contract: {balanceEthersContract} ETH
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Toolbar>
+          </Toolbar>
+        )}
+
+        {isUser && (
+          <Toolbar>
+            <Grid container alignItems='center' spacing={1}>
+              <Grid item xs>
+                <Typography color='inherit' variant='h5' component='h1'>
+                  Welcome
+                </Typography>
+              </Grid>
+
+              <Grid>
+                <Grid item>
+                  <Typography color='inherit'>
+                    Tockens : {balanceClient} 🚀
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Toolbar>
+        )}
+
+        {isLaboratory && (
+          <Toolbar>
+            <Grid container alignItems='center' spacing={1}>
+              <Grid item xs>
+                <Typography color='inherit' variant='h5' component='h1'>
+                  Welcome Laboratory
+                </Typography>
+              </Grid>
+
+              <Grid>
+                <Grid item>
+                  <Typography color='inherit'>
+                    Tockens : {balanceLaboratory} 🚀
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Toolbar>
+        )}
       </AppBar>
     </React.Fragment>
   );

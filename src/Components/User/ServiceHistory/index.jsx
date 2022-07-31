@@ -28,7 +28,7 @@ const ServiceHistory = (props) => {
 
   return (
     <>
-      <SearchBar {...props} isHistory />
+      <SearchBar {...props} isUserHistory />
       <Container>
         {listServiceHistory && listServiceHistory.length > 0 ? (
           <>
