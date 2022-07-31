@@ -57,7 +57,7 @@ const SpecialServices = (props) => {
                 marginBottom: 10,
               }}
             >
-              Special Servicesgf
+              Special Services
             </Typography>
             <Paper>
               <TableContainer component={Paper} style={{ height: 400 }}>

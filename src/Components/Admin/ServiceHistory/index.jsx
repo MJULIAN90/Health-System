@@ -101,7 +101,7 @@ const ServiceHistory = (props) => {
         ) : (
           <NoInfo
             titlesList={titlesHistoryTransaction}
-            message={"Not basic services available"}
+            message={"Not history services available"}
             sceneMessage={"History"}
             isHeader
           />
