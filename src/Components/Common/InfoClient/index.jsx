@@ -60,7 +60,7 @@ const InfoClient = (props) => {
                   marginBottom: 10,
                 }}
               >
-                Clients
+                {name}
               </Typography>
               <Paper>
                 <TableContainer component={Paper} style={{ height: 400 }}>
